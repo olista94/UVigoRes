@@ -8,10 +8,10 @@ if (!isset($_SESSION['login'])) {
 }
 
 include_once '../Models/Recursos_Model.php';
-include_once '../Views/Resource_List_View.php';
-include_once '../Views/Resource_Edit_View.php';
-include_once '../Views/Resource_Add_View.php';
-include_once '../Views/Resource_View_View.php';
+include_once '../Views/Recurso_List_View.php';
+include_once '../Views/Recurso_Edit_View.php';
+include_once '../Views/Recurso_Add_View.php';
+include_once '../Views/Recurso_View_View.php';
 include_once '../Views/MESSAGE.php';
 
 // Comprobamos que acción está definida
@@ -22,9 +22,9 @@ if (!isset($_REQUEST['action'])) {
 switch ($_REQUEST['action']) {
     case 'list_recursos':
         if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Gestor') {
-            $model = new Recursos_Model('', '', '', '');
+            $model = new Recursos_Model('', '', '', '', '');
             $result = $model->search(); // Obtén todos los recursos
-            new Resource_List_View($result);
+            new Recurso_List_View($result);
         } else {
             header('Location: ../index.php');
         }
@@ -32,13 +32,13 @@ switch ($_REQUEST['action']) {
     
     case 'view_recursos':
         if ($_SESSION['rol'] === 'Admin') {
-            $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '');
+            $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '', '');
             $recurso_data = $model->rellenadatos()->fetch_array();
             
             if (!$recurso_data) {
                 new MESSAGE('Recurso no encontrado', 'Recursos_Controller.php?action=list_recursos');
             } else {
-                new Resource_View_View($recurso_data);
+                new Recurso_View_View($recurso_data);
             }
         } else {
             header('Location: ../index.php');
@@ -48,7 +48,7 @@ switch ($_REQUEST['action']) {
     case 'edit_recurso':
         if ($_SESSION['rol'] === 'Admin') {
             if (!isset($_POST['ID_Recurso'])) {
-                $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '');
+                $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '', '');
                 $recurso_data = $model->rellenadatos()->fetch_array();
 
                 if (!$recurso_data) {
@@ -56,20 +56,22 @@ switch ($_REQUEST['action']) {
                     exit();
                 }
 
-                new Resource_Edit_View($recurso_data);
+                new Recurso_Edit_View($recurso_data);
             } else {
                 $data = array(
                     'ID_Recurso' => $_POST['ID_Recurso'],
                     'Tipo' => $_POST['Tipo'],
                     'Descripcion' => $_POST['Descripcion'],
-                    'Disponibilidad' => $_POST['Disponibilidad']
+                    'Disponibilidad' => $_POST['Disponibilidad'],
+                    'ID_Centro' => $_POST['ID_Centro']
                 );
 
                 $model = new Recursos_Model(
                     $data['ID_Recurso'],
                     $data['Tipo'],
                     $data['Descripcion'],
-                    $data['Disponibilidad']
+                    $data['Disponibilidad'],
+                    $data['ID_Centro'],
                 );
                 $result = $model->edit();
                 new MESSAGE($result, 'Recursos_Controller.php?action=list_recursos');
@@ -82,7 +84,7 @@ switch ($_REQUEST['action']) {
     case 'add_recurso':
         if ($_SESSION['rol'] === 'Admin') {
             if (!isset($_POST['Tipo'])) {
-                new Resource_Add_View();
+                new Recurso_Add_View();
             } else {
                 $data = array(
                     'Tipo' => $_POST['Tipo'],

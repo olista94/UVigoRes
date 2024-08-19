@@ -12,50 +12,41 @@ include_once '../Views/Menu_View.php';
 include_once '../Views/Reserva_View.php';
 include_once '../Views/MESSAGE.php';
 
-function getDataForm() {
-    $ID_Recurso = $_REQUEST['ID_Recurso'];
-    $Fecha_Hora_Reserva = $_REQUEST['Fecha_Hora_Reserva'];
-    $Codigo_QR = 'QR' . uniqid();
-    $Estado = 'No Confirmada';
+class Reserva_Controller {
 
-    return array(
-        'ID_Usuario' => $_SESSION['ID_Usuario'],
-        'ID_Recurso' => $ID_Recurso,
-        'Fecha_Hora_Reserva' => $Fecha_Hora_Reserva,
-        'Codigo_QR' => $Codigo_QR,
-        'Estado' => $Estado
-    );
-}
+    function __construct() {
+        // if (isset($_GET['action']) && $_GET['action'] == 'reservar') {
+        //     $this->reservar();
+        // } else {
+        //     $this->mostrarFormularioReserva();
+        // }
+        $this->mostrarFormularioReserva();
+    }
 
-if (!isset($_REQUEST['action'])) {
-    $_REQUEST['action'] = '';
-}
+    // Muestra el formulario de reserva con los recursos disponibles
+    function mostrarFormularioReserva() {
+        $model = new Reserva_Model(null, null, null, null);
+        $ID_Franja = isset($_GET['ID_Franja']) ? $_GET['ID_Franja'] : 1; // Asumimos una franja predeterminada
+        $recursosDisponibles = $model->getRecursosDisponibles($ID_Franja);
+        new Reserva_View($recursosDisponibles, $ID_Franja);
+    }
 
-switch ($_REQUEST['action']) {
-    case 'menu':
-        new Menu_View();
-        break;
+    // Maneja la acción de reservar un recurso
+    function reservar() {
+        if (isset($_POST['ID_Recurso']) && isset($_POST['Fecha_Hora_Reserva']) && isset($_POST['ID_Franja'])) {
+            $ID_Usuario = $_SESSION['ID_Usuario']; // ID del usuario autenticado
+            $ID_Recurso = $_POST['ID_Recurso'];
+            $Fecha_Hora_Reserva = $_POST['Fecha_Hora_Reserva'];
+            $ID_Franja = $_POST['ID_Franja'];
 
-    case 'reservar':
-        if (!isset($_POST['ID_Recurso'])) {
-            new Reserva_View();
-        } else {
-            $data = getDataForm();
-            $reserva = new Reserva_Model(
-                '',
-                $data['ID_Usuario'],
-                $data['ID_Recurso'],
-                $data['Fecha_Hora_Reserva'],
-                $data['Codigo_QR'],
-                $data['Estado']
-            );
-            $respuesta = $reserva->reservar();
-            new MESSAGE($respuesta, '../index.php');
+            $model = new Reserva_Model($ID_Usuario, $ID_Recurso, $Fecha_Hora_Reserva, $ID_Franja);
+
+            if ($model->reservarRecurso()) {
+                echo "Reserva realizada con éxito";
+            } else {
+                echo "El recurso no está disponible en la franja horaria seleccionada.";
+            }
         }
-        break;
-
-    default:
-        new Menu_View();
+    }
 }
-
 ?>

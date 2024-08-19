@@ -67,8 +67,8 @@ class Usuarios_Model {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
     
-        $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
-        $stmt->bind_param('sssssss', $this->NIU, $this->Nombre, $this->Apellidos, $this->DNI, $this->Email, $this->Rol, $hashed_password);
+        // $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
+        $stmt->bind_param('sssssss', $this->NIU, $this->Nombre, $this->Apellidos, $this->DNI, $this->Email, $this->Rol, $this->Contrasena);
     
         if (!$stmt->execute()) {
             return 'Error al insertar. Ya existe un usuario con ese DNI';
@@ -78,21 +78,23 @@ class Usuarios_Model {
     }
 
     function edit() {
-        $sql = "UPDATE Usuario SET
-                    NIU = ?,
-                    Nombre = ?,
-                    Apellidos = ?,
-                    Email = ?,
-                    Contrasena = ?
-                WHERE DNI = ?";
+        $sql = "UPDATE Usuario SET 
+                NIU = ?, 
+                Nombre = ?, 
+                Apellidos = ?, 
+                Email = ?, 
+                Rol = ?, 
+                Contrasena = ? 
+              WHERE ID_Usuario = ?";
+
         $stmt = $this->mysqli->prepare($sql);
+
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
 
-        $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
-        $stmt->bind_param('ssssss', $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $hashed_password, $this->DNI);
-
+        // $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
+    $stmt->bind_param('ssssssi', $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Usuario);
         if (!$stmt->execute()) {
             return 'Error en la modificación';
         } else {

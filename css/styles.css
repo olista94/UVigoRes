@@ -101,7 +101,6 @@ footer {
 .alert.info {background-color: #2196F3;} /* Blue */
 .alert.warning {background-color: #ff9800;} /* Orange */
 
-
 /* Form Styles */
 form {
     background: #fff;
@@ -122,7 +121,8 @@ form {
     font-weight: bold;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
     width: 94%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -130,6 +130,34 @@ form {
     font-size: 16px;
 }
 
+/* Specific styling for the role select */
+#Rol {
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 10px;
+    padding-right: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#Rol:hover {
+    border-color: #073349;
+}
+
+#Rol:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Styling the submit button */
 form button {
     width: 100%;
     padding: 10px;
@@ -142,7 +170,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #073349;
+    background-color: #003d82;
 }
 
 /* Table Styles */
@@ -201,4 +229,3 @@ form button:hover {
 .button-delete:hover {
     background-color: #c82333;
 }
-

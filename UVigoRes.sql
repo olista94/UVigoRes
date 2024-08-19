@@ -4,10 +4,10 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 -- Base de datos: `UVigoRes`
-DROP SCHEMA IF EXISTS `UVigoRes`;
+DROP SCHEMA IF EXISTS `UVigoRes2`;
 
-CREATE DATABASE IF NOT EXISTS `UVigoRes` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `UVigoRes`;
+CREATE DATABASE IF NOT EXISTS `UVigoRes2` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `UVigoRes2`;
 
 -- Creación de la tabla Usuario
 CREATE TABLE Usuario (
@@ -21,12 +21,23 @@ CREATE TABLE Usuario (
     Contrasena VARCHAR(100) NOT NULL
 );
 
+-- Creación de la tabla Centro
+CREATE TABLE Centro (
+    ID_Centro INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Direccion VARCHAR(100) NOT NULL,
+    Telefono VARCHAR(15) NOT NULL,
+    Email VARCHAR(100) NOT NULL
+);
+
 -- Creación de la tabla Recurso
 CREATE TABLE Recurso (
     ID_Recurso INT AUTO_INCREMENT PRIMARY KEY,
     Tipo VARCHAR(50) NOT NULL,
     Descripcion TEXT NOT NULL,
-    Disponibilidad ENUM('Disponible', 'No disponible') NOT NULL
+    Disponibilidad ENUM('Disponible', 'No disponible') NOT NULL,
+    ID_Centro INT NOT NULL,
+    FOREIGN KEY (ID_Centro) REFERENCES Centro(ID_Centro)
 );
 
 -- Creación de la tabla Franja
@@ -43,7 +54,6 @@ CREATE TABLE Reserva (
     ID_Recurso INT NOT NULL,
     Fecha_Hora_Reserva DATETIME NOT NULL,
     ID_Franja INT NOT NULL,
-    Codigo_QR VARCHAR(100) NOT NULL,
     Estado ENUM('Confirmada', 'No Confirmada') NOT NULL,
     FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario),
     FOREIGN KEY (ID_Recurso) REFERENCES Recurso(ID_Recurso),
@@ -86,23 +96,35 @@ INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 ('87654321B', 'María', 'García', '1002', 'maria.garcia@uvigo.es', 'Docente', 'contrasena2'),
 ('11223344C', 'Ana', 'López', '1003', 'ana.lopez@uvigo.es', 'Becario de infraestrucura', 'contrasena3'),
 ('99887766D', 'Luis', 'Fernández', '1004', 'luis.fernandez@uvigo.es', 'Personal de conserjeria', 'contrasena4'),
-('55443322E', 'Carlos', 'Sánchez', '1005', 'carlos.sanchez@uvigo.es', 'Admin', 'contrasena5');
+('55443322E', 'Admin', 'Adminez', '1005', 'admin@uvigo.es', 'Admin', 'admin');
+
+INSERT INTO Centro (Nombre, Direccion, Telefono, Email) VALUES
+('Facultad de Ciencias Económicas y Empresariales', 'Campus Lagoas-Marcosende, Vigo', '986812345', 'fceconomicas@uvigo.es'),
+('Facultad de Derecho', 'Campus Lagoas-Marcosende, Vigo', '986812678', 'fderecho@uvigo.es'),
+('Escuela de Ingeniería Industrial', 'Campus Lagoas-Marcosende, Vigo', '986812234', 'eingenieriaindustrial@uvigo.es'),
+('Facultad de Biología', 'Campus Lagoas-Marcosende, Vigo', '986812890', 'fbiologia@uvigo.es'),
+('Facultad de Ciencias del Mar', 'Campus Lagoas-Marcosende, Vigo', '986812456', 'fcienciasdelmar@uvigo.es'),
+('Facultad de Filología y Traducción', 'Campus Lagoas-Marcosende, Vigo', '986812567', 'ffilologiatraduccion@uvigo.es'),
+('Facultad de Ciencias Sociales y de la Comunicación', 'Campus A Xunqueira, Pontevedra', '986801234', 'fcienciassociales@uvigo.es'),
+('Facultad de Ciencias de la Educación y del Deporte', 'Campus A Xunqueira, Pontevedra', '986801567', 'fcienciaseducacion@uvigo.es'),
+('Escuela de Ingeniería de Telecomunicación', 'Campus Lagoas-Marcosende, Vigo', '986812678', 'eingenieriatelecomunicacion@uvigo.es'),
+('Facultad de Historia', 'Campus As Lagoas, Ourense', '988387123', 'fhistoria@uvigo.es');
 
 -- Inserción de datos en la tabla Recurso
-INSERT INTO Recurso (Tipo, Descripcion, Disponibilidad) VALUES
-('Portátil', 'Portátil Dell Latitude 7490', 'Disponible'),
-('Aula', 'Aula de teoría 101', 'Disponible'),
-('Laboratorio', 'Laboratorio de Informática 202', 'Disponible'),
-('Sala', 'Sala de Juntas', 'Disponible'),
-('Proyector', 'Proyector Epson EB-S41', 'Disponible');
+INSERT INTO Recurso (Tipo, Descripcion, Disponibilidad, ID_Centro) VALUES
+('Portátil', 'Portátil Dell Latitude 7490', 'Disponible', 1 ),
+('Aula', 'Aula de teoría 101', 'Disponible', 2 ),
+('Laboratorio', 'Laboratorio de Informática 202', 'Disponible', 9 ),
+('Sala', 'Sala de Juntas', 'Disponible', 3 ),
+('Proyector', 'Proyector Epson EB-S41', 'Disponible', 4 );
 
 -- Inserción de datos en la tabla Reserva
-INSERT INTO Reserva (ID_Usuario, ID_Recurso, Fecha_Hora_Reserva, ID_Franja, Codigo_QR, Estado) VALUES
-(1, 1, '2024-07-20 10:00:00', 2, 'QR1234567890', 'Confirmada'),
-(2, 2, '2024-07-21 14:00:00', 4, 'QR0987654321', 'Confirmada'),
-(3, 3, '2024-07-22 08:00:00', 1, 'QR1122334455', 'No Confirmada'),
-(4, 4, '2024-07-23 09:00:00', 1, 'QR5566778899', 'Confirmada'),
-(5, 5, '2024-07-24 11:00:00', 3, 'QR6677889900', 'Confirmada');
+INSERT INTO Reserva (ID_Usuario, ID_Recurso, Fecha_Hora_Reserva, ID_Franja, Estado) VALUES
+(1, 1, '2024-07-20 10:00:00', 2, 'Confirmada'),
+(2, 2, '2024-07-21 14:00:00', 4, 'Confirmada'),
+(3, 3, '2024-07-22 08:00:00', 1, 'No Confirmada'),
+(4, 4, '2024-07-23 09:00:00', 1, 'Confirmada'),
+(5, 5, '2024-07-24 11:00:00', 3, 'Confirmada');
 
 -- Inserción de datos en la tabla Incidencia
 INSERT INTO Incidencia (ID_Usuario, ID_Recurso, Descripcion_Problema, Fecha_Reporte, Estado) VALUES

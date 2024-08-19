@@ -28,6 +28,7 @@
         echo "<div class='menu'>";
         if ($user_role === 'Admin') {
             echo "<a href='Controllers/Usuarios_Controller.php?action=list_users'>Gestion de usuarios</a>";
+            echo "<a href='Controllers/Centros_Controller.php?action=list_centros'>Gestion de centros</a>";
             echo "<a href='Controllers/Recursos_Controller.php?action=list_recursos'>Gestion de recursos</a>";
         } else {
             echo "<a href='Controllers/Usuarios_Controller.php?action=edit_user&DNI=" . urlencode($_SESSION['login']) . "'>Editar Usuario</a>";

@@ -4,12 +4,14 @@ class Recursos_Model {
     var $Tipo;
     var $Descripcion;
     var $Disponibilidad;
+    var $ID_Centro;
 
-    function __construct($ID_Recurso, $Tipo, $Descripcion, $Disponibilidad) {
+    function __construct($ID_Recurso, $Tipo, $Descripcion, $Disponibilidad, $ID_Centro) {
         $this->ID_Recurso = $ID_Recurso;
         $this->Tipo = $Tipo;
         $this->Descripcion = $Descripcion;
         $this->Disponibilidad = $Disponibilidad;
+        $this->ID_Centro = $ID_Centro;
 
         include_once 'Access_DB.php';
         $this->mysqli = ConnectDB();
@@ -17,14 +19,14 @@ class Recursos_Model {
 
     // Método para añadir un recurso
     function add() {
-        $sql = "INSERT INTO Recursos (Tipo, Descripcion, Disponibilidad) 
-                VALUES (?, ?, ?)";
+        $sql = "INSERT INTO Recurso (Tipo, Descripcion, Disponibilidad, ID_Centro) 
+                VALUES (?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
     
-        $stmt->bind_param('sss', $this->Tipo, $this->Descripcion, $this->Disponibilidad);
+        $stmt->bind_param('sssi', $this->Tipo, $this->Descripcion, $this->Disponibilidad, $this->ID_Centro);
     
         if (!$stmt->execute()) {
             return 'Error al insertar el recurso';
@@ -33,20 +35,20 @@ class Recursos_Model {
         }
     }
     
-
     // Método para editar un recurso
     function edit() {
         $sql = "UPDATE Recurso SET
                     Tipo = ?,
                     Descripcion = ?,
-                    Disponibilidad = ?
+                    Disponibilidad = ?,
+                    ID_Centro = ?
                 WHERE ID_Recurso = ?";
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
 
-        $stmt->bind_param('sssi', $this->Tipo, $this->Descripcion, $this->Disponibilidad, $this->ID_Recurso);
+        $stmt->bind_param('ssssi', $this->Tipo, $this->Descripcion, $this->Disponibilidad, $this->ID_Centro, $this->ID_Recurso);
 
         if (!$stmt->execute()) {
             return 'Error en la modificación';
@@ -57,21 +59,25 @@ class Recursos_Model {
 
     // Método para buscar recursos
     function search() {
-        $sql = "SELECT * FROM Recurso 
-                WHERE Tipo LIKE ? AND 
-                      Descripcion LIKE ? AND 
-                      Disponibilidad LIKE ?";
-
+        $sql = "SELECT Recurso.*, Centro.Nombre AS Nombre_Centro 
+                FROM Recurso 
+                INNER JOIN Centro ON Recurso.ID_Centro = Centro.ID_Centro
+                WHERE Recurso.Tipo LIKE ? AND 
+                      Recurso.Descripcion LIKE ? AND 
+                      Recurso.Disponibilidad LIKE ? AND
+                      Centro.Nombre LIKE ?";
+    
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
-
+    
         $search_tipo = "%$this->Tipo%";
         $search_descripcion = "%$this->Descripcion%";
         $search_disponibilidad = "%$this->Disponibilidad%";
-
-        $stmt->bind_param('sss', $search_tipo, $search_descripcion, $search_disponibilidad);
+        $search_centro = "%$this->ID_Centro%";
+    
+        $stmt->bind_param('ssss', $search_tipo, $search_descripcion, $search_disponibilidad, $search_centro);
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -94,12 +100,16 @@ class Recursos_Model {
 
     // Método para rellenar datos de un recurso por su ID
     function rellenadatos() {
-        $sql = "SELECT * FROM Recurso WHERE ID_Recurso = ?";
+        $sql = "SELECT Recurso.*, Centro.Nombre AS Nombre_Centro 
+                FROM Recurso 
+                INNER JOIN Centro ON Recurso.ID_Centro = Centro.ID_Centro
+                WHERE Recurso.ID_Recurso = ?";
+        
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
-
+    
         $stmt->bind_param('i', $this->ID_Recurso);
         $stmt->execute();
         return $stmt->get_result();
@@ -125,6 +135,23 @@ class Recursos_Model {
     
         return $roles;
     }
+
+    function getCentros() {
+        $centros = array();
+        
+        // Consulta para obtener los nombres de todos los centros
+        $sql = "SELECT Nombre FROM Centro";
+        $result = $this->mysqli->query($sql);
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $centros[] = $row['Nombre'];
+            }
+        }
+        
+        return $centros;
+    }
+    
 }
 
 ?>

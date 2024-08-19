@@ -8,10 +8,10 @@ if (!isset($_SESSION['login'])) {
 }
 
 include_once '../Models/Usuarios_Model.php';
-include_once '../Views/User_List_View.php';
-include_once '../Views/User_Edit_View.php';
-include_once '../Views/User_Add_View.php';
-include_once '../Views/User_View_View.php';
+include_once '../Views/Usuario_List_View.php';
+include_once '../Views/Usuario_Edit_View.php';
+include_once '../Views/Usuario_Add_View.php';
+include_once '../Views/Usuario_View_View.php';
 include_once '../Views/MESSAGE.php';
 
 // Comprobamos que acción está definida
@@ -40,8 +40,8 @@ switch ($_REQUEST['action']) {
             }
     
             // Mostrar la vista con los resultados
-            include_once '../Views/User_List_View.php';
-            new User_List_View($result);
+            include_once '../Views/Usuario_List_View.php';
+            new Usuario_List_View($result);
         } else {
             header('Location: ../index.php');
         }
@@ -52,7 +52,7 @@ switch ($_REQUEST['action']) {
             $search_query = $_POST['search_query'];
             $model = new Usuarios_Model('', '', '', '', '', '', '', '');
             $result = $model->search($search_query); // Modifica tu método search() para aceptar un parámetro de búsqueda
-            new User_List_View($result);
+            new Usuario_List_View($result);
         } else {
             header('Location: ../index.php');
         }
@@ -66,7 +66,7 @@ switch ($_REQUEST['action']) {
             if (!$user_data) {
                 new MESSAGE('Usuario no encontrado', 'Usuarios_Controller.php?action=list_users');
             } else {
-                new User_View_View($user_data);
+                new Usuario_View_View($user_data);
             }
         } else {
             header('Location: ../index.php');
@@ -75,9 +75,7 @@ switch ($_REQUEST['action']) {
 
     case 'edit_user':
         if ($_SESSION['rol'] === 'Admin' || $_SESSION['login'] === $_REQUEST['DNI']) {
-            // En este caso, verifica si se ha pasado el DNI por el formulario de edición
             if (!isset($_POST['DNI'])) {
-                // Si no se ha enviado 'DNI', cargamos los datos del usuario
                 $dni_to_edit = $_SESSION['rol'] === 'Admin' ? $_REQUEST['DNI'] : $_SESSION['login'];
                 $model = new Usuarios_Model('', '', '', '', $dni_to_edit, '', '', '');
                 $user_data = $model->rellenadatos()->fetch_array();
@@ -87,13 +85,8 @@ switch ($_REQUEST['action']) {
                     exit();
                 }
     
-                new User_Edit_View($user_data);
+                new Usuario_Edit_View($user_data);
             } else {
-                // Verifica los valores de $_POST
-                if (!isset($_POST['ID_Usuario'])) {
-                    new MESSAGE('ID de usuario no definido', 'Usuarios_Controller.php?action=list_users');
-                    exit();
-                }
     
                 $data = array(
                     'ID_Usuario' => $_POST['ID_Usuario'],
@@ -122,12 +115,12 @@ switch ($_REQUEST['action']) {
         } else {
             header('Location: ../index.php');
         }
-    break;
+        break; 
         
     case 'add_user':
         if ($_SESSION['rol'] === 'Admin') {
             if (!isset($_POST['DNI'])) {
-                new User_Add_View();
+                new Usuario_Add_View();
             } else {
                 $data = array(
                     'NIU' => $_POST['NIU'],
