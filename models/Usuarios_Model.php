@@ -93,8 +93,7 @@ class Usuarios_Model {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
 
-        // $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
-    $stmt->bind_param('ssssssi', $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Usuario);
+        $stmt->bind_param('ssssssi', $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Usuario);
         if (!$stmt->execute()) {
             return 'Error en la modificación';
         } else {
@@ -195,5 +194,30 @@ class Usuarios_Model {
     
         return $roles;
     }
+
+    function changePassword($new_password, $confirm_password) {
+        // Verificar que la nueva contraseña y la confirmación coincidan
+        if ($new_password !== $confirm_password) {
+            return 'Las contraseñas no coinciden';
+        }
+        
+        // Actualizar la contraseña en la base de datos
+        $sql = "UPDATE Usuario SET Contrasena = ? WHERE ID_Usuario = ?";
+        $stmt = $this->mysqli->prepare($sql);
+    
+        if ($stmt === false) {
+            return 'Error al preparar la consulta: ' . $this->mysqli->error;
+        }
+    
+        // Vincular los parámetros
+        $stmt->bind_param('si', $hashed_password, $this->ID_Usuario);
+    
+        if (!$stmt->execute()) {
+            return 'Error al cambiar la contraseña';
+        } else {
+            return 'Contraseña cambiada correctamente';
+        }
+    }
+    
 }
 ?>

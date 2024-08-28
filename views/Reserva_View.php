@@ -1,24 +1,16 @@
-
-
 <?php
 
 class Reserva_View {
-    private $recursos;
-    private $ID_Franja;
-
-    function __construct($recursos, $ID_Franja) {
-        $this->recursos = $recursos;
-        $this->ID_Franja = $ID_Franja;
+    function __construct($reservation_data) {
+        $this->reservation_data = $reservation_data;
         $this->render();
     }
 
     function render() {
-        $user_role = $_SESSION['rol']; // Recupera el rol del usuario
         include '../Locales/Strings_SPANISH.php';
-        include_once '../Models/Access_DB.php';
-        include_once '../Models/Reserva_Model.php';
-        $mysqli = ConnectDB();
 
+        // Convertir la fecha y hora de reserva al formato dd-mm-aaaa hh:mm:ss
+        $fecha_hora_reserva = date("d-m-Y H:i:s", strtotime($this->reservation_data['Fecha_Hora_Reserva']));
         ?>
 
         <!DOCTYPE html>
@@ -26,40 +18,51 @@ class Reserva_View {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title><?php echo $strings['Reservar Recurso']; ?></title>
+            <title><?php echo $strings['Ver Reserva']; ?></title>
+
             <link href="../Views/img/icon.png" rel="shortcut icon" type="image/x-icon" />
             <link rel="stylesheet" href="../css/styles.css">
         </head>
         <body>
             <div class="container">
-                <h1><?php echo $strings['Reservar Recurso']; ?></h1>
-                <form action="Reserva_Controller.php?action=reservar" method="post" class="form">
-
-                    <div class="form-group">
-                        <label for="ID_Recurso"><?php echo $strings['Recurso']; ?>:</label>
-                        <select name="ID_Recurso" id="ID_Recurso" required>
-                            <?php
-                            while ($row = $this->recursos->fetch_assoc()) {
-                                echo "<option value='{$row['ID_Recurso']}'>{$row['Descripcion']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Fecha_Hora_Reserva"><?php echo $strings['Fecha y Hora de la Reserva']; ?>:</label>
-                        <input type="datetime-local" name="Fecha_Hora_Reserva" id="Fecha_Hora_Reserva" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ID_Franja"><?php echo $strings['Franja Horaria']; ?>:</label>
-                        <input type="number" name="ID_Franja" id="ID_Franja" value="<?php echo $this->ID_Franja; ?>" readonly>
-                    </div>
-
-                    <button type="submit" class="button"><?php echo $strings['Reservar']; ?></button>
-                </form>
-
-                <a href="../index.php" class="button"><?php echo $strings['Volver']; ?></a>
+                <h1><?php echo $strings['Ver Reserva']; ?></h1>
+                <table class="table">
+                    <tr>
+                        <th><?php echo $strings['Usuario']; ?></th>
+                        <td><?php echo $this->reservation_data['NombreUsuario'] . ' ' . $this->reservation_data['ApellidosUsuario']; ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Recurso']; ?></th>
+                        <td><?php echo $this->reservation_data['TipoRecurso']; ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Centro']; ?></th>
+                        <td><?php echo $this->reservation_data['Nombre_Centro']; ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Fecha y Hora de la Reserva']; ?></th>
+                        <td><?php echo $fecha_hora_reserva; ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Hora Inicio']; ?></th>
+                        <td><?php echo $this->reservation_data['Hora_Inicio']; ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Hora Fin']; ?></th>
+                        <td><?php echo $this->reservation_data['Hora_Fin']; ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Estado']; ?></th>
+                        <td><?php echo $this->reservation_data['Estado']; ?></td>
+                    </tr>
+                </table>
+                <a class="button" href="Reservas_Controller.php?action=ver_reservas_usuario" title="<?php echo $strings['Volver']; ?>">
+                    <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
+                </a>
+                <!-- Botón para crear incidencia -->
+                <a class="button" href="Incidencias_Controller.php?action=add_incidencia&ID_Reserva=<?php echo $this->reservation_data['ID_Reserva']; ?>" title="<?php echo $strings['Crear Incidencia']; ?>">
+                    <img src="../views/img/incidencia.png" alt="<?php echo $strings['Crear Incidencia']; ?>" style="width: 20px; height: 20px;">
+                </a>
             </div>
         </body>
         </html>

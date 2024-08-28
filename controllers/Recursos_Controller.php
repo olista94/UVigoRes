@@ -21,7 +21,7 @@ if (!isset($_REQUEST['action'])) {
 
 switch ($_REQUEST['action']) {
     case 'list_recursos':
-        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Gestor') {
+        if ($_SESSION['rol'] === 'Admin') {
             $model = new Recursos_Model('', '', '', '', '');
             $result = $model->search(); // Obtén todos los recursos
             new Recurso_List_View($result);

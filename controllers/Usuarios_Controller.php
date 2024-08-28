@@ -12,6 +12,8 @@ include_once '../Views/Usuario_List_View.php';
 include_once '../Views/Usuario_Edit_View.php';
 include_once '../Views/Usuario_Add_View.php';
 include_once '../Views/Usuario_View_View.php';
+include_once '../Views/Usuario_Menu_Edit_View.php';
+include_once '../Views/Usuario_Change_Password_View.php';
 include_once '../Views/MESSAGE.php';
 
 // Comprobamos que acción está definida
@@ -85,7 +87,7 @@ switch ($_REQUEST['action']) {
                     exit();
                 }
     
-                new Usuario_Edit_View($user_data);
+                new Usuario_Menu_Edit_View($user_data);
             } else {
     
                 $data = array(
@@ -99,7 +101,7 @@ switch ($_REQUEST['action']) {
                     'Contrasena' => $_POST['Contrasena']
                 );
     
-                $model = new Usuarios_Model(
+                $model = new Usuario_Menu_Edit_View(
                     $data['ID_Usuario'],
                     $data['NIU'],
                     $data['Nombre'],
@@ -162,6 +164,35 @@ switch ($_REQUEST['action']) {
 
     default:
         header('Location: ../index.php');
+        break;
+
+    case 'change_password':
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['login'] === $_REQUEST['DNI']) {
+            $model = new Usuarios_Model('', '', '', '', $_REQUEST['DNI'], '', '', '');
+            $user_data = $model->rellenadatos()->fetch_array();
+    
+            if (!$user_data) {
+                new MESSAGE('Usuario no encontrado', 'Usuarios_Controller.php?action=list_users');
+                exit();
+            }
+    
+            new Usuario_Change_Password_View($user_data);
+        } else {
+            header('Location: ../index.php');
+        }
+        break;
+
+    case 'update_password':
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['login'] === $_POST['DNI']) {
+            $new_password = $_POST['Nueva_Contrasena'];
+            $confirm_password = $_POST['Confirmar_Contrasena'];
+    
+            $model = new Usuarios_Model('', '', '', '', $_POST['DNI'], '', '', '');
+            $result = $model->changePassword($new_password, $confirm_password);
+            new MESSAGE($result, 'Usuarios_Controller.php?action=list_users');
+        } else {
+            header('Location: ../index.php');
+        }
         break;
 }
 

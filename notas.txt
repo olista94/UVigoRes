@@ -1,0 +1,9 @@
+Problemas:
+
+crear la incidencia (usuario)
+
+Asignar la incidencia  aun usuario que este en el centro del recurso de la incidencia
+
+Mejora:
+
+no deje reservar dos aulas a la vez : Hacer dos o mas reservas del mismo tipo en la misma franja horaria

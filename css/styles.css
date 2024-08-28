@@ -9,7 +9,6 @@ body {
 }
 
 .h1 {
-    margin: 0;
     font-size: 24px;
     text-align: center;
 }
@@ -18,6 +17,17 @@ body {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
+}
+
+.textarea-estilo {
+    width: 100%; /* Asegura que el textarea ocupe todo el ancho del contenedor */
+    /* height: 150px; Altura específica para el textarea */
+    padding: 10px; /* Espacio interior para el contenido */
+    border: 1px solid #ccc; /* Bordes grises claros */
+    border-radius: 4px; /* Bordes ligeramente redondeados */
+    font-size: 16px; /* Tamaño de fuente más grande */
+    resize: vertical; /* Permite al usuario cambiar el tamaño solo en vertical */
+    box-sizing: border-box; /* Incluye padding y borde en el ancho y alto */
 }
 
 /* Header */
@@ -121,13 +131,65 @@ form {
     font-weight: bold;
 }
 
-.form-group input,
-.form-group select {
+.form-group input
+{
     width: 94%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Specific styling for the role select */
+#usuario {
+    width: 100%;
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 10px;
+    padding-right: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#usuario:hover {
+    border-color: #073349;
+}
+
+/* Specific styling for the role select */
+#Recurso {
+    width: 100%;
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 10px;
+    padding-right: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#Recurso:hover {
+    border-color: #073349;
 }
 
 /* Specific styling for the role select */
@@ -222,10 +284,36 @@ form button:hover {
     background-color: #218838;
 }
 
+.button-confirm {
+    background-color: #28a745; /* Green */
+}
+
+.button-confirm:hover {
+    background-color: #218838;
+}
+
 .button-delete {
     background-color: #dc3545; /* Red */
 }
 
 .button-delete:hover {
     background-color: #c82333;
+}
+
+/* Estilos para el campo del DNI */
+#login {
+    background-image: url('../views/img/user-icon.png'); /* Ruta a la imagen del usuario */
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 10px center; /* Imagen a la izquierda */
+    padding-left: 10px; /* Espacio suficiente para la imagen */
+}
+
+/* Estilos para el campo de la contraseña */
+#password {
+    background-image: url('../views/img/lock-icon.png'); /* Ruta a la imagen del candado */
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 10px center; /* Imagen a la izquierda */
+    padding-left: 10px; /* Espacio suficiente para la imagen */
 }

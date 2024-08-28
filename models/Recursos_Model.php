@@ -151,6 +151,26 @@ class Recursos_Model {
         
         return $centros;
     }
+
+    function getCentrosWithIDs() {
+        $sql = "SELECT ID_Centro, Nombre FROM Centro";
+        $result = $this->mysqli->query($sql);
+    
+        if ($result === false) {
+            return 'Error al realizar la consulta: ' . $this->mysqli->error;
+        }
+    
+        $centros = array();
+        while ($row = $result->fetch_assoc()) {
+            $centros[] = array(
+                'ID_Centro' => $row['ID_Centro'],
+                'Nombre' => $row['Nombre']
+            );
+        }
+    
+        return $centros;
+    }
+    
     
 }
 

@@ -63,8 +63,8 @@ class Usuario_Add_View {
                     </div>
 
                     <div class="form-group">
-                        <label for="Contrasena"><?php echo $strings['Contrasena']; ?>:</label>
-                        <input type="password" name="Contrasena" id="Contrasena" required autocomplete="off"><br>
+                        <label for="Contraseña"><?php echo $strings['Contraseña']; ?>:</label>
+                        <input type="password" name="Contraseña" id="Contraseña" required autocomplete="off"><br>
                     </div>
 
                     <button type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
