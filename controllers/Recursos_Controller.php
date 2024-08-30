@@ -89,14 +89,16 @@ switch ($_REQUEST['action']) {
                 $data = array(
                     'Tipo' => $_POST['Tipo'],
                     'Descripcion' => $_POST['Descripcion'],
-                    'Disponibilidad' => $_POST['Disponibilidad']
+                    'Disponibilidad' => $_POST['Disponibilidad'],
+                    'ID_Centro' => $_POST['ID_Centro']
                 );
 
                 $model = new Recursos_Model(
                     '',
                     $data['Tipo'],
                     $data['Descripcion'],
-                    $data['Disponibilidad']
+                    $data['Disponibilidad'],
+                    $data['ID_Centro'],
                 );
                 $result = $model->add();
                 new MESSAGE($result, 'Recursos_Controller.php?action=list_recursos');
@@ -108,7 +110,7 @@ switch ($_REQUEST['action']) {
 
     case 'delete_recurso':
         if ($_SESSION['rol'] === 'Admin') {
-            $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '');
+            $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '', '');
             $result = $model->delete();
             new MESSAGE($result, 'Recursos_Controller.php?action=list_recursos');
         } else {

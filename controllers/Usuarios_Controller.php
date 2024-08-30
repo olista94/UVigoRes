@@ -89,6 +89,10 @@ switch ($_REQUEST['action']) {
     
                 new Usuario_Menu_Edit_View($user_data);
             } else {
+                // Obtener la contraseña actual del usuario de la base de datos
+                $model = new Usuarios_Model('', '', '', '', $_POST['DNI'], '', '', '');
+                $user_data = $model->rellenadatos()->fetch_array();
+                $current_password = $user_data['Contrasena']; // Contraseña actual
     
                 $data = array(
                     'ID_Usuario' => $_POST['ID_Usuario'],
@@ -98,10 +102,10 @@ switch ($_REQUEST['action']) {
                     'DNI' => $_POST['DNI'],
                     'Email' => $_POST['Email'],
                     'Rol' => $_POST['Rol'],
-                    'Contrasena' => $_POST['Contrasena']
+                    'Contrasena' => $current_password // Usar la contraseña actual
                 );
     
-                $model = new Usuario_Menu_Edit_View(
+                $model = new Usuarios_Model(
                     $data['ID_Usuario'],
                     $data['NIU'],
                     $data['Nombre'],
@@ -117,7 +121,25 @@ switch ($_REQUEST['action']) {
         } else {
             header('Location: ../index.php');
         }
-        break; 
+        break;
+        
+        
+    case 'edit_user_view':
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['login'] === $_REQUEST['DNI']) {
+            $dni_to_edit = $_REQUEST['DNI'];
+            $model = new Usuarios_Model('', '', '', '', $dni_to_edit, '', '', '');
+            $user_data = $model->rellenadatos()->fetch_array();
+    
+            if (!$user_data) {
+                new MESSAGE('Usuario no encontrado', 'Usuarios_Controller.php?action=list_users');
+                exit();
+            }
+    
+            new Usuario_Edit_View($user_data);
+        } else {
+            header('Location: ../index.php');
+        }
+        break;
         
     case 'add_user':
         if ($_SESSION['rol'] === 'Admin') {
@@ -125,10 +147,10 @@ switch ($_REQUEST['action']) {
                 new Usuario_Add_View();
             } else {
                 $data = array(
-                    'NIU' => $_POST['NIU'],
+                    'DNI' => $_POST['DNI'],
                     'Nombre' => $_POST['Nombre'],
                     'Apellidos' => $_POST['Apellidos'],
-                    'DNI' => $_POST['DNI'],
+                    'NIU' => $_POST['NIU'],
                     'Email' => $_POST['Email'],
                     'Rol' => $_POST['Rol'],
                     'Contrasena' => $_POST['Contrasena']
@@ -136,10 +158,10 @@ switch ($_REQUEST['action']) {
 
                 $model = new Usuarios_Model(
                     '',
-                    $data['NIU'],
+                    $data['DNI'],
                     $data['Nombre'],
                     $data['Apellidos'],
-                    $data['DNI'],
+                    $data['NIU'],
                     $data['Email'],
                     $data['Rol'],
                     $data['Contrasena']
@@ -187,6 +209,7 @@ switch ($_REQUEST['action']) {
             $new_password = $_POST['Nueva_Contrasena'];
             $confirm_password = $_POST['Confirmar_Contrasena'];
     
+            // Crear una instancia del modelo utilizando el ID_Usuario
             $model = new Usuarios_Model('', '', '', '', $_POST['DNI'], '', '', '');
             $result = $model->changePassword($new_password, $confirm_password);
             new MESSAGE($result, 'Usuarios_Controller.php?action=list_users');

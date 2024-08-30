@@ -29,6 +29,9 @@ class Usuario_List_View {
                         <input type="text" name="search_query" placeholder="Buscar usuario...">
                         <input type="submit" value="Buscar">
                     </form> -->
+                    <a class="button" href="Usuarios_Controller.php?action=add_user" title="<?php echo $strings['Añadir Usuario']; ?>">
+                        <img src="../views/img/add-user.png" alt="<?php echo $strings['Añadir Usuario']; ?>" style="width: 20px; height: 20px;">
+                    </a><br>
                     <table class="table">
                     <thead>
                         <tr>
@@ -67,9 +70,7 @@ class Usuario_List_View {
                     ?>
                     </tbody>
                 </table>
-                <a class="button" href="Usuarios_Controller.php?action=add_user" title="<?php echo $strings['Añadir Usuario']; ?>">
-                    <img src="../views/img/add-user.png" alt="<?php echo $strings['Añadir Usuario']; ?>" style="width: 20px; height: 20px;">
-                </a><br>
+                
                 <a class="button" href="../index.php" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>

@@ -110,10 +110,10 @@ switch ($_REQUEST['action']) {
             $ID_Reserva = $_REQUEST['ID_Reserva'];
             $model = new Reservas_Model('', '', '', '', '', '');
             $resultado = $model->crear_reserva($ID_Reserva);
-            if ($resultado === "Reserva confirmada exitosamente") {
+            if (trim($resultado) === "Reserva confirmada exitosamente") {
                 new MESSAGE('Reserva confirmada con éxito.', 'Reservas_Controller.php?action=ver_reservas');
             } else {
-                new MESSAGE('Error al confirmar la reserva: ' . $resultado, 'Reservas_Controller.php?action=ver_reservas');
+                new MESSAGE(' ' . $resultado, 'Reservas_Controller.php?action=ver_reservas');
             }
         }
         break;

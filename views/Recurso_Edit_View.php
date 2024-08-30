@@ -49,7 +49,7 @@ class Recurso_Edit_View {
                         <select name="Disponibilidad" id="Disponibilidad" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
                             <?php foreach ($disponibles as $disponibilidad): ?>
                                 <option value="<?php echo htmlspecialchars($disponibilidad); ?>" 
-                                        <?php if ($disponibilidad == $this->resource_data['Disponibilidad']) echo 'selected'; ?>>
+                                    <?php if ($disponibilidad == $this->resource_data['Disponibilidad']) echo 'selected'; ?>>
                                     <?php echo htmlspecialchars($disponibilidad); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -58,11 +58,11 @@ class Recurso_Edit_View {
 
                     <div class="form-group">
                         <label for="Centro"><?php echo $strings['Centro']; ?>:</label>
-                        <select name="Centro" id="Centro" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                        <select name="ID_Centro" id="Centro" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
                             <?php foreach ($centros as $centro): ?>
-                                <option value="<?php echo htmlspecialchars($centro); ?>" 
-                                        <?php if ($centro == $this->resource_data['Centro']) echo 'selected'; ?>>
-                                    <?php echo htmlspecialchars($centro); ?>
+                                <option value="<?php echo htmlspecialchars($centro['ID_Centro']); ?>" 
+                                    <?php if ($centro['ID_Centro'] == $this->resource_data['ID_Centro']) echo 'selected'; ?>>
+                                <?php echo htmlspecialchars($centro['Nombre']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

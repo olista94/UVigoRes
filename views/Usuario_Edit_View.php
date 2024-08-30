@@ -30,37 +30,7 @@ class Usuario_Edit_View {
                 <form action="Usuarios_Controller.php?action=edit_user" method="post" class="form">
                     <input type="hidden" name="ID_Usuario" value="<?php echo htmlspecialchars($this->user_data['ID_Usuario']); ?>">
 
-                    <!-- Campos de edición, sin la opción de cambiar la contraseña -->
-                    <div class="form-group">
-                        <label for="NIU"><?php echo $strings['NIU']; ?>:</label>
-                        <input type="text" name="NIU" id="NIU" 
-                               value="<?php echo htmlspecialchars($this->user_data['NIU']); ?>" 
-                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
-                        <?php if ($user_role !== 'Admin'): ?>
-                            <input type="hidden" name="NIU" value="<?php echo htmlspecialchars($this->user_data['NIU']); ?>">
-                        <?php endif; ?>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Nombre"><?php echo $strings['Nombre']; ?>:</label>
-                        <input type="text" name="Nombre" id="Nombre" 
-                               value="<?php echo htmlspecialchars($this->user_data['Nombre']); ?>" 
-                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
-                        <?php if ($user_role !== 'Admin'): ?>
-                            <input type="hidden" name="Nombre" value="<?php echo htmlspecialchars($this->user_data['Nombre']); ?>">
-                        <?php endif; ?>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Apellidos"><?php echo $strings['Apellidos']; ?>:</label>
-                        <input type="text" name="Apellidos" id="Apellidos" 
-                               value="<?php echo htmlspecialchars($this->user_data['Apellidos']); ?>" 
-                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
-                        <?php if ($user_role !== 'Admin'): ?>
-                            <input type="hidden" name="Apellidos" value="<?php echo htmlspecialchars($this->user_data['Apellidos']); ?>">
-                        <?php endif; ?>
-                    </div>
-
+                    <!-- Campo DNI -->
                     <div class="form-group">
                         <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
                         <input type="text" name="DNI" id="DNI" 
@@ -71,12 +41,47 @@ class Usuario_Edit_View {
                         <?php endif; ?>
                     </div>
 
+                    <!-- Campo Nombre -->
+                    <div class="form-group">
+                        <label for="Nombre"><?php echo $strings['Nombre']; ?>:</label>
+                        <input type="text" name="Nombre" id="Nombre" 
+                               value="<?php echo htmlspecialchars($this->user_data['Nombre']); ?>" 
+                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                        <?php if ($user_role !== 'Admin'): ?>
+                            <input type="hidden" name="Nombre" value="<?php echo htmlspecialchars($this->user_data['Nombre']); ?>">
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Campo Apellidos -->
+                    <div class="form-group">
+                        <label for="Apellidos"><?php echo $strings['Apellidos']; ?>:</label>
+                        <input type="text" name="Apellidos" id="Apellidos" 
+                               value="<?php echo htmlspecialchars($this->user_data['Apellidos']); ?>" 
+                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                        <?php if ($user_role !== 'Admin'): ?>
+                            <input type="hidden" name="Apellidos" value="<?php echo htmlspecialchars($this->user_data['Apellidos']); ?>">
+                        <?php endif; ?>
+                    </div>
+                    
+                    <!-- Campo NIU -->
+                    <div class="form-group">
+                        <label for="NIU"><?php echo $strings['NIU']; ?>:</label>
+                        <input type="text" name="NIU" id="NIU" 
+                               value="<?php echo htmlspecialchars($this->user_data['NIU']); ?>" 
+                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                        <?php if ($user_role !== 'Admin'): ?>
+                            <input type="hidden" name="NIU" value="<?php echo htmlspecialchars($this->user_data['NIU']); ?>">
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Campo Correo Electrónico -->
                     <div class="form-group">
                         <label for="Correo_Electronico"><?php echo $strings['Correo Electrónico']; ?>:</label>
                         <input type="email" name="Email" id="Correo_Electronico" 
                                value="<?php echo htmlspecialchars($this->user_data['Email']); ?>" required>
                     </div>
 
+                    <!-- Campo Rol -->
                     <div class="form-group">
                         <label for="Rol"><?php echo $strings['Rol']; ?>:</label>
                         <select name="Rol" id="Rol" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>

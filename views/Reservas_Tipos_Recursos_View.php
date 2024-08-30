@@ -31,7 +31,7 @@ class Reservas_Tipos_Recursos_View {
                                         <?php
                                             while ($tipo = $tipos->fetch_assoc()) {
                                                 // Comprobamos si el usuario es "Estudiante" y el tipo de recurso es "Aula", "Laboratorio" o "sala"
-                                                if ($user_role === 'Estudiante' && in_array($tipo['Tipo'], ['Aula', 'Laboratorio', 'sala'])) {
+                                                if ($user_role === 'Estudiante' && in_array($tipo['Tipo'], ['Aula', 'Laboratorio', 'Sala'])) {
                                                     // Si es así, no mostramos esta opción
                                                     continue;
                                                 }

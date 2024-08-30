@@ -23,6 +23,9 @@ class Centro_List_View {
         <body>
             <div class="container">
                 <h1><?php echo $strings['Lista de Centros']; ?></h1>
+                <a class="button" href="Centros_Controller.php?action=add_centro"title="<?php echo $strings['Añadir Centro']; ?>">
+                    <img src="../views/img/add-resource.png" alt="<?php echo $strings['Añadir Recurso']; ?>" style="width: 20px; height: 20px;">
+                </a><br>
                 <table class="table">
                     <thead>
                         <tr>
@@ -56,9 +59,6 @@ class Centro_List_View {
                     ?>
                     </tbody>
                 </table>
-                <a class="button" href="Centros_Controller.php?action=add_centro"title="<?php echo $strings['Añadir Centro']; ?>">
-                    <img src="../views/img/add-resource.png" alt="<?php echo $strings['Añadir Recurso']; ?>" style="width: 20px; height: 20px;">
-                </a><br>
                 <a class="button" href="../index.php" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>

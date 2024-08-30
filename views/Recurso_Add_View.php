@@ -9,10 +9,9 @@ class Recurso_Add_View {
         include '../Locales/Strings_SPANISH.php';
         include_once '../models/Recursos_Model.php'; // Incluir el modelo de recursos
         
-        // $recursosModel = new Recursos_Model(); // Crear una instancia del modelo de recursos
         $recursosModel = new Recursos_Model(null, null, null, null, null); // Crear una instancia del modelo de recursos
         $disponibles = $recursosModel->getDisponibilidad(); // Obtener la disponibilidad desde el modelo
-        $centros = $recursosModel->getCentros(); // Obtener los desde el modelo
+        $centros = $recursosModel->getCentros(); // Obtener los centros desde el modelo
         ?>
 
         <!DOCTYPE html>
@@ -28,7 +27,7 @@ class Recurso_Add_View {
         <body>
             <div class="container">
                 <h1><?php echo $strings['Añadir Recurso']; ?></h1>
-                <form action="Recursos_Controller.php?action=add_resource" method="post" class="form">
+                <form action="Recursos_Controller.php?action=add_recurso" method="post" class="form">
 
                     <div class="form-group">
                         <label for="Tipo"><?php echo $strings['Tipo']; ?>:</label>
@@ -36,29 +35,32 @@ class Recurso_Add_View {
                     </div>
 
                     <div class="form-group">
-                        <label for="Descripción"><?php echo $strings['Descripción']; ?>:</label>
-                        <input type="text" name="Descripción" id="Descripción" required>
+                        <label for="Descripcion"><?php echo $strings['Descripción']; ?>:</label>
+                        <input type="text" name="Descripcion" id="Descripcion" required>
                     </div>
 
                     <div class="form-group">
                         <label for="Disponibilidad"><?php echo $strings['Disponibilidad']; ?>:</label>
-                            <select name="Disponibilidad" id="Disponibilidad" required>
-                                <?php foreach ($disponibles as $disponibilidad): ?>
-                                    <option value="<?php echo $rol; ?>"><?php echo $disponibilidad; ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                        <select name="Disponibilidad" id="Disponibilidad" required>
+                            <?php foreach ($disponibles as $disponibilidad): ?>
+                                <option value="<?php echo htmlspecialchars($disponibilidad); ?>">
+                                    <?php echo htmlspecialchars($disponibilidad); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="Centro"><?php echo $strings['Centro']; ?>:</label>
-                            <select name="Centro" id="Centro" required>
-                                <?php foreach ($centros as $centro): ?>
-                                    <option value="<?php echo $centro; ?>"><?php echo $centro; ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                        <select name="ID_Centro" id="Centro" required>
+                            <?php foreach ($centros as $centro): ?>
+                                <option value="<?php echo htmlspecialchars($centro['ID_Centro']); ?>">
+                                    <?php echo htmlspecialchars($centro['Nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     
-
                     <button type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
                 </form>
                 <a class="button" href="Recursos_Controller.php?action=list_recursos" title="<?php echo $strings['Volver']; ?>">

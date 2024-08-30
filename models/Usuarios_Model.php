@@ -59,17 +59,36 @@ class Usuarios_Model {
         }
     }
 
+    // function registrar() {
+    //     $sql = "INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) 
+    //             VALUES (?, ?, ?, ?, ?, ?, ?)";
+    //             var_dump($this->mysqli->query($sql));
+    //     $stmt = $this->mysqli->prepare($sql);
+    //     if ($stmt === false) {
+    //         return 'Error al preparar la consulta: ' . $this->mysqli->error;
+    //     }
+    
+    //     // $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
+    //     $stmt->bind_param('sssssss', $this->DNI, $this->Nombre, $this->Apellidos, $this->NIU, $this->Email, $this->Rol, $this->Contrasena);
+    
+    //     if (!$stmt->execute()) {
+    //         return 'Error al insertar. Ya existe un usuario con ese DNI';
+    //     } else {
+    //         return 'Inserción correcta';
+    //     }
+    // }
     function registrar() {
-        $sql = "INSERT INTO Usuario (NIU, Nombre, Apellidos, DNI, Email, Rol, Contrasena) 
+        $sql = "INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
     
-        // $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
-        $stmt->bind_param('sssssss', $this->NIU, $this->Nombre, $this->Apellidos, $this->DNI, $this->Email, $this->Rol, $this->Contrasena);
+        // Bind parameters
+        $stmt->bind_param('sssssss', $this->DNI, $this->Nombre, $this->Apellidos, $this->NIU, $this->Email, $this->Rol, $this->Contrasena);
     
+        // Execute statement
         if (!$stmt->execute()) {
             return 'Error al insertar. Ya existe un usuario con ese DNI';
         } else {
@@ -196,21 +215,20 @@ class Usuarios_Model {
     }
 
     function changePassword($new_password, $confirm_password) {
-        // Verificar que la nueva contraseña y la confirmación coincidan
         if ($new_password !== $confirm_password) {
             return 'Las contraseñas no coinciden';
         }
-        
-        // Actualizar la contraseña en la base de datos
-        $sql = "UPDATE Usuario SET Contrasena = ? WHERE ID_Usuario = ?";
+    
+        // $hashed_password = password_hash($new_password, PASSWORD_DEFAULT); // Asegúrate de hashear la contraseña
+    
+        $sql = "UPDATE Usuario SET Contrasena = ? WHERE DNI = ?";
         $stmt = $this->mysqli->prepare($sql);
     
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
     
-        // Vincular los parámetros
-        $stmt->bind_param('si', $hashed_password, $this->ID_Usuario);
+        $stmt->bind_param('si', $new_password, $this->DNI);
     
         if (!$stmt->execute()) {
             return 'Error al cambiar la contraseña';
@@ -218,6 +236,7 @@ class Usuarios_Model {
             return 'Contraseña cambiada correctamente';
         }
     }
+    
     
 }
 ?>

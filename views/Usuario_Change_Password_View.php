@@ -23,7 +23,11 @@ class Usuario_Change_Password_View {
             <div class="container">
                 <h1 class="h1"><?php echo $strings['Cambiar Contraseña']; ?></h1>
                 <form action="Usuarios_Controller.php?action=update_password" method="post" class="form">
+                    <!-- Campo oculto para ID_Usuario -->
                     <input type="hidden" name="ID_Usuario" value="<?php echo htmlspecialchars($this->user_data['ID_Usuario']); ?>">
+
+                    <!-- Campo oculto para DNI -->
+                    <input type="hidden" name="DNI" value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>">
 
                     <div class="form-group">
                         <input type="password" name="Nueva_Contrasena" id="Nueva_Contrasena" 

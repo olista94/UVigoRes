@@ -30,8 +30,8 @@ class Usuario_Add_View {
                 <h1><?php echo $strings['Añadir Usuario']; ?></h1>
                 <form action="Usuarios_Controller.php?action=add_user" method="post" class="form">
                     <div class="form-group">
-                        <label for="NIU"><?php echo $strings['NIU']; ?>:</label>
-                        <input type="text" name="NIU" id="NIU" required>
+                        <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
+                        <input type="text" name="DNI" id="DNI" required>
                     </div>
 
                     <div class="form-group">   
@@ -44,8 +44,8 @@ class Usuario_Add_View {
                         <input type="text" name="Apellidos" id="Apellidos" required>
 
                     <div class="form-group">
-                        <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
-                        <input type="text" name="DNI" id="DNI" required>
+                        <label for="NIU"><?php echo $strings['NIU']; ?>:</label>
+                        <input type="text" name="NIU" id="NIU" required>
                     </div>
 
                     <div class="form-group">
@@ -63,8 +63,8 @@ class Usuario_Add_View {
                     </div>
 
                     <div class="form-group">
-                        <label for="Contraseña"><?php echo $strings['Contraseña']; ?>:</label>
-                        <input type="password" name="Contraseña" id="Contraseña" required autocomplete="off"><br>
+                        <label for="Contrasena"><?php echo $strings['Contrasena']; ?>:</label>
+                        <input type="password" name="Contrasena" id="Contrasena" required autocomplete="off"><br>
                     </div>
 
                     <button type="submit" class="button"><?php echo $strings['Añadir']; ?></button>

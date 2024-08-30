@@ -37,6 +37,7 @@ class Recursos_Model {
     
     // Método para editar un recurso
     function edit() {
+        
         $sql = "UPDATE Recurso SET
                     Tipo = ?,
                     Descripcion = ?,
@@ -136,22 +137,41 @@ class Recursos_Model {
         return $roles;
     }
 
+    // function getCentros() {
+    //     $centros = array();
+        
+    //     // Consulta para obtener los nombres de todos los centros
+    //     $sql = "SELECT Nombre FROM Centro";
+    //     $result = $this->mysqli->query($sql);
+    
+    //     if ($result->num_rows > 0) {
+    //         while ($row = $result->fetch_assoc()) {
+    //             $centros[] = $row['Nombre'];
+    //         }
+    //     }
+        
+    //     return $centros;
+    // }
+
     function getCentros() {
         $centros = array();
         
-        // Consulta para obtener los nombres de todos los centros
-        $sql = "SELECT Nombre FROM Centro";
+        // Consulta para obtener los ID y nombres de todos los centros
+        $sql = "SELECT ID_Centro, Nombre FROM Centro";
         $result = $this->mysqli->query($sql);
     
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $centros[] = $row['Nombre'];
+                $centros[] = array(
+                    'ID_Centro' => $row['ID_Centro'],
+                    'Nombre' => $row['Nombre']
+                );
             }
         }
         
         return $centros;
     }
-
+    
     function getCentrosWithIDs() {
         $sql = "SELECT ID_Centro, Nombre FROM Centro";
         $result = $this->mysqli->query($sql);

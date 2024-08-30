@@ -302,18 +302,21 @@ form button:hover {
 
 /* Estilos para el campo del DNI */
 #login {
+    width: 87%; /* Ancho específico para el campo de login */
     background-image: url('../views/img/user-icon.png'); /* Ruta a la imagen del usuario */
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 10px center; /* Imagen a la izquierda */
-    padding-left: 10px; /* Espacio suficiente para la imagen */
+    background-size: 20px 20px; /* Tamaño de la imagen de fondo */
+    background-repeat: no-repeat; /* Evitar que la imagen se repita */
+    background-position: 10px center; /* Posiciona la imagen a la izquierda centrada verticalmente */
+    padding-left: 40px; /* Incrementa el padding para dejar espacio para el icono */
 }
 
 /* Estilos para el campo de la contraseña */
 #password {
+    width: 87%; /* Ancho específico para el campo de login */
     background-image: url('../views/img/lock-icon.png'); /* Ruta a la imagen del candado */
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 10px center; /* Imagen a la izquierda */
-    padding-left: 10px; /* Espacio suficiente para la imagen */
+    background-size: 20px 20px; /* Tamaño de la imagen de fondo */
+    background-repeat: no-repeat; /* Evitar que la imagen se repita */
+    background-position: 10px center; /* Posiciona la imagen a la izquierda centrada verticalmente */
+    padding-left: 40px; /* Incrementa el padding para dejar espacio para el icono */
 }
+

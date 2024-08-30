@@ -49,12 +49,22 @@ switch ($_REQUEST['action']) {
             $ID_Incidencia = $_GET['ID_Incidencia'];
             $model = new Incidencias_Model($ID_Incidencia, '', '', '', '', '');
             $incidencia = $model->getIncidenciaById();
-            $usuarios = $model->getBecariosYConserjes(); // Obtener usuarios becarios y conserjes
-            new Incidencia_Asignar_View($incidencia, $usuarios);
+    
+            if ($incidencia) {  // Aseguramos que la incidencia existe
+                // Obtener el ID del centro del recurso relacionado con la incidencia
+                $ID_Centro = $incidencia['ID_Centro'];
+    
+                // Obtener usuarios becarios y conserjes que pertenecen al centro
+                $usuarios = $model->getBecariosYConserjesDelCentro($ID_Centro);
+                new Incidencia_Asignar_View($incidencia, $usuarios);
+            } else {
+                new MESSAGE('Incidencia no encontrada.', '../index.php');
+            }
         } else {
             header('Location: ../index.php');
         }
         break;
+        
 
     case 'assign':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

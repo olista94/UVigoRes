@@ -58,6 +58,7 @@ class Incidencias_Model {
                     Usuario.Apellidos AS Apellidos_Usuario,
                     Recurso.Tipo AS Tipo_Recurso,
                     Recurso.Descripcion AS Descripcion_Recurso,
+                    Centro.ID_Centro AS ID_Centro,  -- Aseguramos obtener el ID_Centro aquí
                     Centro.Nombre AS Nombre_Centro,
                     IncAsig.ID_Usuario AS ID_Usuario_Asignado,
                     UsuarioAsignado.Nombre AS Nombre_Usuario_Asignado,
@@ -82,13 +83,14 @@ class Incidencias_Model {
         $stmt->bind_param('i', $this->ID_Incidencia);
         $stmt->execute();
         $result = $stmt->get_result();
-
+    
         if ($result->num_rows > 0) {
             return $result->fetch_assoc();
         } else {
             return null; // Si no se encuentra la incidencia
         }
     }
+    
 
     // Método para obtener recursos sin incidencias asignadas
     function getRecursosSinIncidencias() {
@@ -267,6 +269,45 @@ class Incidencias_Model {
             $this->mysqli->rollback();
             return "Error: " . $e->getMessage();
         }
+    }
+
+    // Método para obtener becarios y conserjes que pertenecen al mismo centro que el recurso de la incidencia
+    public function getBecariosYConserjesDelCentro($ID_Centro) {
+        $sql = "
+            SELECT 
+                Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
+            FROM 
+                Usuario
+            JOIN 
+                Centro_Becario ON Usuario.ID_Usuario = Centro_Becario.ID_Usuario
+            WHERE 
+                Centro_Becario.ID_Centro = ?
+            AND 
+                Usuario.Rol = 'Becario de infraestrucura'
+
+            UNION
+
+            SELECT 
+                Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
+            FROM 
+                Usuario
+            JOIN 
+                Centro_Conserje ON Usuario.ID_Usuario = Centro_Conserje.ID_Usuario
+            WHERE 
+                Centro_Conserje.ID_Centro = ?
+            AND 
+                Usuario.Rol = 'Personal de conserjeria'";
+
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('ii', $ID_Centro, $ID_Centro);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result === false) {
+            return [];
+        }
+
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function getRecursoByReserva($ID_Reserva) {
