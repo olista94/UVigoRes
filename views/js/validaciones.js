@@ -1,4 +1,4 @@
-function validarDNI(dni) {
+function isValidDni(dni) {
     var pattern = /^[0-9]{8}[A-Za-z]$/;
     if (!pattern.test(dni)) {
         return false;
@@ -12,28 +12,71 @@ function validarDNI(dni) {
     return true;
 }
 
-function validarEmail(email) {
+function isValidEmail(email) {
     var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return pattern.test(email);
 }
 
-function validarFormulario() {
-    var dni = document.getElementById('dni').value;
-    var email = document.getElementById('email').value;
+function isValidNiu(niu) {
+    const regex = /^0050000\d{5}$/;
+    return regex.test(niu);
+}
 
-    if (!validarDNI(dni)) {
-        alert('DNI no válido');
+function isValidPassword(contrasena) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,128}$/;
+    
+    return regex.test(contrasena);
+}
+
+function isValidForm() {
+    const dni = document.getElementById('dni').value;
+    const email = document.getElementById('email').value;
+    const niu = document.getElementById('niu').value;
+    const password = document.getElementById('contrasena').value;
+
+    if (!isValidDni(dni)) {
+        showErrorMessage('DNI no válido');
         return false;
     }
 
-    if (!validarEmail(email)) {
-        alert('Correo electrónico no válido');
+    if (!isValidEmail(email)) {
+        showErrorMessage('Correo electrónico no válido');
+        return false;
+    }
+
+    if (!isValidNiu(niu)) {
+        showErrorMessage('El Niu no es válido');
+        return false;
+    }
+
+    if (!isValidPassword(password)) {
+        showErrorMessage('La contrasena no es válida');
         return false;
     }
 
     return true;
 }
 
-document.getElementById('miFormulario').onsubmit = function() {
-    return validarFormulario();
-};
+function showErrorMessage(msg) {
+    const messageDiv  = document.getElementById('validation-message');
+    const messageElem = document.createElement('p');
+    
+    messageElem.innerText = msg;
+    messageDiv.appendChild(messageElem);
+    messageDiv.classList.toggle('hidden');
+ 
+    setTimeout(() => {
+        messageDiv.removeChild(messageElem);
+        messageDiv.classList.toggle('hidden');
+    }, 3000)
+}
+
+document.getElementById('submit-btn').addEventListener('click', (event) => {
+    event.preventDefault();
+
+    if (!isValidForm()) {
+        return;
+    }
+
+    document.querySelector('form').submit();
+});

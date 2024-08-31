@@ -90,13 +90,25 @@ switch ($_REQUEST['action']) {
     
             if ($reservation_data) {
                 // Pasar ID_Reserva y ID_Recurso a la vista
-                $reservation_data['ID_Reserva'] = $ID_Reserva;
                 new Incidencia_Add_View($reservation_data);
             } else {
                 new MESSAGE('Error al cargar los datos de la reserva.', '../index.php');
             }
         } else {
             new MESSAGE('Error al cargar los datos de la reserva.', '../index.php');
+        }
+        break;
+
+    case 'delete_incidencia':
+        if (isset($_GET['ID_Incidencia'])) {
+            $ID_Incidencia = $_GET['ID_Incidencia'];
+
+            $model   = new Incidencias_Model($ID_Incidencia, '', '', '', '', '');
+            $message = $model->delete($ID_Incidencia);
+
+            new MESSAGE($message, 'Incidencias_Controller.php?action=list_all_incidencias');
+        } else {
+            new MESSAGE('Error al cargar los datos de la incidencia.', '../index.php');
         }
         break;
         
@@ -119,10 +131,15 @@ switch ($_REQUEST['action']) {
     // Nueva acción para mostrar el formulario de crear incidencia
     case 'crear_incidencia_form':
         if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Personal de conserjeria') {
-            $model = new Incidencias_Model('', '', '', '', '', '');
+            $model    = new Incidencias_Model('', '', '', '', '', '');
+            $centroID = $_GET['ID_Centro'] ?? null;
+            $usuarios = !empty($centroID) 
+                ? $model->getBecariosYConserjesDelCentro($centroID) 
+                : $model->getBecariosYConserjes();
+            $selectedResource = $_GET['ID_Recurso'] ?? null;
+
             $recursos = $model->getRecursosSinIncidencias(); // Obtener recursos sin incidencias
-            $usuarios = $model->getBecariosYConserjes(); // Obtener usuarios becarios y conserjes
-            new Incidencia_Crear_View($recursos, $usuarios);
+            new Incidencia_Crear_View($recursos, $usuarios, $selectedResource);
         } else {
             header('Location: ../index.php');
         }

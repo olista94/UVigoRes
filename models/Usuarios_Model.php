@@ -39,48 +39,16 @@ class Usuarios_Model {
             }
         }
     }
-    
 
-    function register() {
-        $sql = "SELECT * FROM Usuario WHERE DNI = ?";
-        $stmt = $this->mysqli->prepare($sql);
-        if ($stmt === false) {
-            return 'Error al preparar la consulta: ' . $this->mysqli->error;
-        }
-
-        $stmt->bind_param('s', $this->DNI);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 1) {
-            return 'El usuario ya existe';
-        } else {
-            return true;
-        }
-    }
-
-    // function registrar() {
-    //     $sql = "INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) 
-    //             VALUES (?, ?, ?, ?, ?, ?, ?)";
-    //             var_dump($this->mysqli->query($sql));
-    //     $stmt = $this->mysqli->prepare($sql);
-    //     if ($stmt === false) {
-    //         return 'Error al preparar la consulta: ' . $this->mysqli->error;
-    //     }
-    
-    //     // $hashed_password = password_hash($this->Contrasena, PASSWORD_DEFAULT);
-    //     $stmt->bind_param('sssssss', $this->DNI, $this->Nombre, $this->Apellidos, $this->NIU, $this->Email, $this->Rol, $this->Contrasena);
-    
-    //     if (!$stmt->execute()) {
-    //         return 'Error al insertar. Ya existe un usuario con ese DNI';
-    //     } else {
-    //         return 'Inserción correcta';
-    //     }
-    // }
     function registrar() {
+        if ($this->isAlreadyRegistered()) {
+            return 'Error al insertar. Ya existe un usuario con ese DNI o NIU';
+        }
+
         $sql = "INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($sql);
+
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
@@ -90,10 +58,10 @@ class Usuarios_Model {
     
         // Execute statement
         if (!$stmt->execute()) {
-            return 'Error al insertar. Ya existe un usuario con ese DNI';
-        } else {
-            return 'Inserción correcta';
-        }
+            return 'Error al insertar';
+        } 
+
+        return 'Inserción correcta';
     }
 
     function edit() {
@@ -236,7 +204,19 @@ class Usuarios_Model {
             return 'Contraseña cambiada correctamente';
         }
     }
-    
-    
+
+    private function isAlreadyRegistered() {
+        $sql = "SELECT * FROM Usuario WHERE DNI = ? OR NIU = ?";
+        $stmt = $this->mysqli->prepare($sql);
+        if ($stmt === false) {
+            return 'Error al preparar la consulta: ' . $this->mysqli->error;
+        }
+
+        $stmt->bind_param('ss', $this->DNI, $this->NIU);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return !empty($result->num_rows);
+    }
 }
 ?>

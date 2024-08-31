@@ -42,7 +42,7 @@
             echo "<a href='Controllers/Reservas_Controller.php?action=ver_reservas'>Ver reservas del día</a>";
             echo '<a href="Controllers/Reservas_Controller.php?action=historico">Histórico de reservas</a>';
             echo "<a href='Controllers/Incidencias_Controller.php?action=list_all_incidencias'>Ver todas las incidencias</a>";
-            echo "<a href='Controllers/Incidencias_Controller.php?action=list_incidencias_asignadas'>Ver incidencias asignadas</a>"; // Nueva opción añadida
+            echo "<a href='Controllers/Incidencias_Controller.php?action=list_incidencias_asignadas'>Ver mis incidencias asignadas</a>"; // Nueva opción añadida
         }
 
         if ($user_role === 'Docente' ||  $user_role === 'Estudiante') {

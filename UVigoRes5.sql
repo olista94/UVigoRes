@@ -17,7 +17,7 @@ CREATE TABLE Usuario (
     Apellidos VARCHAR(50) NOT NULL,
     NIU VARCHAR(50) NOT NULL UNIQUE,
     Email VARCHAR(100) NOT NULL,
-    Rol ENUM('Estudiante', 'Docente', 'Becario de infraestrucura', 'Personal de conserjeria', 'Admin') NOT NULL,
+    Rol ENUM('Estudiante', 'Docente', 'Becario de infraestructura', 'Personal de conserjeria', 'Admin') NOT NULL,
     Contrasena VARCHAR(100) NOT NULL
 );
 
@@ -55,8 +55,8 @@ CREATE TABLE Reserva (
     Fecha_Hora_Reserva DATETIME NOT NULL,
     ID_Franja INT NOT NULL,
     Estado ENUM('Confirmada', 'No Confirmada') NOT NULL,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario),
-    FOREIGN KEY (ID_Recurso) REFERENCES Recurso(ID_Recurso),
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    FOREIGN KEY (ID_Recurso) REFERENCES Recurso(ID_Recurso) ON DELETE CASCADE,
     FOREIGN KEY (ID_Franja) REFERENCES Franja(ID_Franja)
 );
 
@@ -69,8 +69,8 @@ CREATE TABLE Incidencia (
     Fecha_Reporte DATETIME NOT NULL,
     Estado ENUM('Pendiente', 'Resuelta') NOT NULL,
     Asignada BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario),
-    FOREIGN KEY (ID_Recurso) REFERENCES Recurso(ID_Recurso)
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE ,
+    FOREIGN KEY (ID_Recurso) REFERENCES Recurso(ID_Recurso) ON DELETE CASCADE
 );
 
 -- Tabla para relacionar Centro con Conserje
@@ -79,7 +79,7 @@ CREATE TABLE Centro_Conserje (
     ID_Usuario INT,
     PRIMARY KEY (ID_Centro, ID_Usuario),
     FOREIGN KEY (ID_Centro) REFERENCES Centro(ID_Centro),
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario)
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE 
 );
 
 -- Trigger para asegurar que solo conserjes sean añadidos a Centro_Conserje
@@ -105,7 +105,7 @@ CREATE TABLE Centro_Becario (
     ID_Usuario INT,
     PRIMARY KEY (ID_Centro, ID_Usuario),
     FOREIGN KEY (ID_Centro) REFERENCES Centro(ID_Centro),
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario)
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE 
 );
 
 -- Trigger para asegurar que solo becarios sean añadidos a Centro_Becario
@@ -117,7 +117,7 @@ FOR EACH ROW
 BEGIN
     DECLARE v_Rol VARCHAR(50);
     SET v_Rol = (SELECT Rol FROM Usuario WHERE ID_Usuario = NEW.ID_Usuario);
-    IF v_Rol != 'Becario de infraestrucura' THEN
+    IF v_Rol != 'Becario de infraestructura' THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Error: Solo los becarios de infraestructura pueden ser asignados a un centro como becario.';
     END IF;
@@ -131,8 +131,8 @@ CREATE TABLE Incidencia_Asignacion (
     ID_Usuario INT NOT NULL,
     Fecha_Asignacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (ID_Incidencia, ID_Usuario),
-    FOREIGN KEY (ID_Incidencia) REFERENCES Incidencia(ID_Incidencia),
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario)
+    FOREIGN KEY (ID_Incidencia) REFERENCES Incidencia(ID_Incidencia) ON DELETE CASCADE,
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE 
 );
 
 -- Crear vista para obtener el centro asociado a cada usuario becario o conserje
@@ -148,7 +148,7 @@ LEFT JOIN
 LEFT JOIN 
     Centro_Becario cb ON u.ID_Usuario = cb.ID_Usuario
 WHERE 
-    u.Rol IN ('Becario de infraestrucura', 'Personal de conserjeria');
+    u.Rol IN ('Becario de infraestructura', 'Personal de conserjeria');
 
 -- Creación del Trigger para validar asignaciones directas
 DELIMITER //
@@ -196,7 +196,7 @@ BEGIN
     SET v_CentroUsuario = (SELECT Centro_ID FROM Vista_Usuario_Centro WHERE ID_Usuario = p_ID_Usuario);
     
     -- Verificar el rol del usuario
-    IF v_Rol NOT IN ('Becario de infraestrucura', 'Personal de conserjería') THEN
+    IF v_Rol NOT IN ('Becario de infraestructura', 'Personal de conserjería') THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Error: Solo los becarios de infraestructura o personal de conserjería pueden ser asignados a incidencias.';
     END IF;
@@ -241,8 +241,8 @@ INSERT INTO Centro (Nombre, Direccion, Telefono, Email) VALUES
 -- Insertar Becarios, Conserjes, Docentes y Estudiantes para cada centro
 INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 -- Facultad de Ciencias Económicas y Empresariales
-('12345679B', 'María', 'Fernández', '005000010001', 'maria.fernandez@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
-('12345680C', 'Carlos', 'Pérez', '005000010002', 'carlos.perez@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
+('12345679B', 'María', 'Fernández', '005000010001', 'maria.fernandez@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
+('12345680C', 'Carlos', 'Pérez', '005000010002', 'carlos.perez@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
 ('12345681D', 'Ana', 'García', '005000010003', 'ana.garcia@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('12345682E', 'Luis', 'Rodríguez', '005000010004', 'luis.rodriguez@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('12345683F', 'Elena', 'Martínez', '005000010005', 'elena.martinez@uvigo.es', 'Docente', 'contrasenaDocente'),
@@ -264,10 +264,10 @@ INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 
 -- Facultad de Escuela de Ingeniería Industrial
 INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
-('45244882H', 'Adelina', 'Gimenez', '005000010021', 'adelina.gimenez@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
-('35495579R', 'Luis Alfonso', 'Rios', '005000010022', 'luisalfonso.rios@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
+('45244882H', 'Adelina', 'Gimenez', '005000010021', 'adelina.gimenez@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
+('35495579R', 'Luis Alfonso', 'Rios', '005000010022', 'luisalfonso.rios@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
 ('72491235L', 'Antonio Jose', 'Gomis', '005000010023', 'antoniojose.gomi@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
-('25231740G', 'Natalia', 'Seoane', '005000010024', 'natalia.seoane@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'), -- Hasta aqui los nombres
+('25231740G', 'Natalia', 'Seoane', '005000010024', 'natalia.seoane@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('14213001J', 'Iria', 'Moncho', '005000010025', 'iria.moncho@uvigo.es', 'Docente', 'contrasenaDocente'),
 ('12345687G', 'Carlos', 'González', '005000010026', 'carlos.gonzalez@uvigo.es', 'Docente', 'contrasenaDocente'),
 ('06188375H', 'Sabela', 'Armesto', '005000010027', 'sabela.armesto@uvigo.es', 'Docente', 'contrasenaDocente'),
@@ -287,8 +287,8 @@ INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 
 -- Facultad de Biología
 INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
-('55678012D', 'Antonio', 'Santos', '005000010041', 'antonio.santos@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
-('66543210E', 'Elisa', 'Prieto', '005000010042', 'elisa.prieto@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
+('55678012D', 'Antonio', 'Santos', '005000010041', 'antonio.santos@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
+('66543210E', 'Elisa', 'Prieto', '005000010042', 'elisa.prieto@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
 ('77490123F', 'Fernando', 'Luna', '005000010043', 'fernando.luna@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('88321234G', 'Pablo', 'Molina', '005000010044', 'pablo.molina@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('99223455H', 'Carmen', 'Ortiz', '005000010045', 'carmen.ortiz@uvigo.es', 'Docente', 'contrasenaDocente'),
@@ -310,8 +310,8 @@ INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 
 -- Escuela de Ingeniería de Telecomunicación
 INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
-('98765432A', 'Patricia', 'Silva', '005000010061', 'patricia.silva@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
-('87654321B', 'Marcos', 'Cabrera', '005000010062', 'marcos.cabrera@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
+('98765432A', 'Patricia', 'Silva', '005000010061', 'patricia.silva@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
+('87654321B', 'Marcos', 'Cabrera', '005000010062', 'marcos.cabrera@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
 ('76543210C', 'Cristina', 'Mejía', '005000010063', 'cristina.mejia@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('65432109D', 'Gabriel', 'Pardo', '005000010064', 'gabriel.pardo@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('54321098E', 'Verónica', 'Sánchez', '005000010065', 'veronica.sanchez@uvigo.es', 'Docente', 'contrasenaDocente'),
@@ -333,8 +333,8 @@ INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 
 -- Facultad de Derecho
 INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
-('12349876A', 'Daniel', 'Nieto', '005000010081', 'daniel.nieto@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
-('23456789B', 'Adriana', 'Marín', '005000010082', 'adriana.marin@uvigo.es', 'Becario de infraestrucura', 'contrasenaBecario'),
+('12349876A', 'Daniel', 'Nieto', '005000010081', 'daniel.nieto@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
+('23456789B', 'Adriana', 'Marín', '005000010082', 'adriana.marin@uvigo.es', 'Becario de infraestructura', 'contrasenaBecario'),
 ('34567890C', 'Pedro', 'Guzmán', '005000010083', 'pedro.guzman@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('45678901D', 'Luisa', 'Pérez', '005000010084', 'luisa.perez@uvigo.es', 'Personal de conserjeria', 'contrasenaConserje'),
 ('56789012E', 'Esteban', 'Morales', '005000010085', 'esteban.morales@uvigo.es', 'Docente', 'contrasenaDocente'),

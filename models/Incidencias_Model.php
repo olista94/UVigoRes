@@ -95,6 +95,7 @@ class Incidencias_Model {
     // Método para obtener recursos sin incidencias asignadas
     function getRecursosSinIncidencias() {
         $sql = "SELECT 
+                    Recurso.ID_Centro,
                     Recurso.ID_Recurso, 
                     Recurso.Tipo, 
                     Recurso.Descripcion 
@@ -155,19 +156,10 @@ class Incidencias_Model {
         if (!$centro) {
             return "Error: No se encontró el centro asociado al recurso.";
         }
-        
-        $ID_Centro = $centro['ID_Centro'];
-    
-        // Verificar si el usuario asignado pertenece al centro
-        $usuario_valido = $this->verificarUsuarioCentro($ID_Usuario_Asignado, $ID_Centro);
-        
-        if (!$usuario_valido) {
-            return "Error: El usuario asignado no pertenece al centro del recurso.";
-        }
-    
+
         // Crear incidencia
         $stmt = $this->mysqli->prepare("INSERT INTO Incidencia (ID_Usuario, ID_Recurso, Descripcion_Problema, Fecha_Reporte, Estado, Asignada) VALUES (?, ?, ?, NOW(), 'Pendiente', TRUE)");
-        $stmt->bind_param('iis', $this->ID_Usuario, $this->ID_Recurso, $this->Descripcion_Problema);
+        $stmt->bind_param('iis', $ID_Usuario_Asignado, $this->ID_Recurso, $this->Descripcion_Problema);
     
         if ($stmt->execute()) {
             $ID_Incidencia = $stmt->insert_id;
@@ -274,29 +266,24 @@ class Incidencias_Model {
     // Método para obtener becarios y conserjes que pertenecen al mismo centro que el recurso de la incidencia
     public function getBecariosYConserjesDelCentro($ID_Centro) {
         $sql = "
-            SELECT 
-                Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
-            FROM 
-                Usuario
-            JOIN 
-                Centro_Becario ON Usuario.ID_Usuario = Centro_Becario.ID_Usuario
-            WHERE 
-                Centro_Becario.ID_Centro = ?
-            AND 
-                Usuario.Rol = 'Becario de infraestrucura'
+                SELECT 
+                    ID_Centro, Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
+                FROM 
+                    Usuario
+                JOIN 
+                    Centro_Becario ON Usuario.ID_Usuario = Centro_Becario.ID_Usuario
+                WHERE ID_Centro = ?
 
-            UNION
+                UNION
 
-            SELECT 
-                Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
-            FROM 
-                Usuario
-            JOIN 
-                Centro_Conserje ON Usuario.ID_Usuario = Centro_Conserje.ID_Usuario
-            WHERE 
-                Centro_Conserje.ID_Centro = ?
-            AND 
-                Usuario.Rol = 'Personal de conserjeria'";
+                SELECT 
+                    ID_Centro, Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
+                FROM 
+                    Usuario
+                JOIN 
+                    Centro_Conserje ON Usuario.ID_Usuario = Centro_Conserje.ID_Usuario
+                WHERE ID_Centro = ?
+            ";
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('ii', $ID_Centro, $ID_Centro);
@@ -311,14 +298,34 @@ class Incidencias_Model {
     }
 
     public function getRecursoByReserva($ID_Reserva) {
-        $query = "SELECT ID_Recurso FROM Reserva WHERE ID_Reserva = ?";
+        $query = "SELECT Recurso.* FROM Reserva INNER JOIN recurso ON Reserva.ID_Recurso = recurso.ID_Recurso WHERE ID_Reserva = ? ";
         $stmt = $this->mysqli->prepare($query);
         $stmt->bind_param('i', $ID_Reserva);
         $stmt->execute();
         $result = $stmt->get_result();
         $reservation_data = $result->fetch_assoc();
+        $reservation_data['ID_Reserva'] = $ID_Reserva;
         
         return $reservation_data;
+    }
+
+    public function delete($ID_Incidencia) {
+        $query = 'DELETE FROM Incidencia WHERE ID_Incidencia = ?';
+
+        $stmt = $this->mysqli->prepare($query);
+        
+        if ($stmt === false) {
+            return 'Error al preparar la consulta: ' . $this->mysqli->error;
+        }
+
+        $stmt->bind_param('i', $ID_Incidencia);
+        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            return 'Error al borrar';
+        } 
+            
+        return 'Borrado correctamente';
     }
 }
 ?>

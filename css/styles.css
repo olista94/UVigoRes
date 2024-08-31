@@ -320,3 +320,18 @@ form button:hover {
     padding-left: 40px; /* Incrementa el padding para dejar espacio para el icono */
 }
 
+#validation-message {
+    background-color: rgb(161, 74, 74); 
+    width: 100%; 
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#validation-message p {
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+

@@ -27,11 +27,12 @@ class Usuario_Add_View {
         </head>
         <body>
             <div class="container">
+                <div id="validation-message" class="error-message hidden"></div>
                 <h1><?php echo $strings['Añadir Usuario']; ?></h1>
-                <form action="Usuarios_Controller.php?action=add_user" method="post" class="form">
+                <form id="user-form" action="Usuarios_Controller.php?action=add_user" method="post" class="form">
                     <div class="form-group">
                         <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
-                        <input type="text" name="DNI" id="DNI" required>
+                        <input type="text" name="DNI" id="dni" required>
                     </div>
 
                     <div class="form-group">   
@@ -45,12 +46,12 @@ class Usuario_Add_View {
 
                     <div class="form-group">
                         <label for="NIU"><?php echo $strings['NIU']; ?>:</label>
-                        <input type="text" name="NIU" id="NIU" required>
+                        <input type="text" name="NIU" id="niu" required>
                     </div>
 
                     <div class="form-group">
                         <label for="Email"><?php echo $strings['Correo Electrónico']; ?>:</label>
-                        <input type="email" name="Email" id="Email" required autocomplete="off">
+                        <input name="Email" id="email" required autocomplete="off">
                     </div>
 
                     <div class="form-group"></div>
@@ -64,15 +65,16 @@ class Usuario_Add_View {
 
                     <div class="form-group">
                         <label for="Contrasena"><?php echo $strings['Contrasena']; ?>:</label>
-                        <input type="password" name="Contrasena" id="Contrasena" required autocomplete="off"><br>
+                        <input type="password" name="Contrasena" id="contrasena" required autocomplete="off"><br>
                     </div>
 
-                    <button type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
+                    <button id="submit-btn" type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
                 </form>
                 <a class="button" href="Usuarios_Controller.php?action=list_users" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
-            </div>    
+            </div>
+            <script src="../views/js/validaciones.js"></script>    
         </body>
         </html>
 

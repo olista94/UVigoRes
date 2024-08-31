@@ -158,10 +158,10 @@ switch ($_REQUEST['action']) {
 
                 $model = new Usuarios_Model(
                     '',
-                    $data['DNI'],
+                    $data['NIU'],
                     $data['Nombre'],
                     $data['Apellidos'],
-                    $data['NIU'],
+                    $data['DNI'],
                     $data['Email'],
                     $data['Rol'],
                     $data['Contrasena']
@@ -219,18 +219,6 @@ switch ($_REQUEST['action']) {
         break;
 }
 
-function validarDNI($dni) {
-    $letras = "TRWAGMYFPDXBNJZSQVHLCKET";
-    if (preg_match('/^[0-9]{8}[A-Za-z]$/', $dni)) {
-        $numero = substr($dni, 0, -1);
-        $letra = strtoupper(substr($dni, -1));
-        return ($letra == $letras[$numero % 23]);
-    }
-    return false;
-}
 
-function validarEmail($email) {
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
 
 ?>

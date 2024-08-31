@@ -25,6 +25,7 @@ class Incidencia_Asignar_View {
                 <h1><?php echo $strings['Asignar Incidencia']; ?></h1>
                 <form action="Incidencias_Controller.php?action=assign" method="POST">
                     <input type="hidden" name="ID_Incidencia" value="<?php echo $this->incidencia['ID_Incidencia']; ?>">
+                    <input type="hidden" name="ID_Centro" value="<?php echo isset($this->reservation_data['ID_Recurso']) ? htmlspecialchars($this->reservation_data['ID_Recurso']) : ''; ?>">
                     
                     <!-- Información de la incidencia -->
                     <p><strong><?php echo $strings['Nombre']; ?>:</strong> <?php echo $this->incidencia['Nombre_Usuario'] . ' ' . $this->incidencia['Apellidos_Usuario']; ?></p>

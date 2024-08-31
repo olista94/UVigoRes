@@ -1,9 +1,10 @@
 <?php
 
 class Incidencia_Crear_View {
-    function __construct($recursos, $usuarios) {
-        $this->recursos = $recursos;
-        $this->usuarios = $usuarios;
+    function __construct($recursos, $usuarios, $selectedResource) {
+        $this->recursos         = $recursos;
+        $this->usuarios         = $usuarios;
+        $this->selectedResource = $selectedResource;
         $this->render();
     }
 
@@ -28,8 +29,13 @@ class Incidencia_Crear_View {
                     <!-- Seleccionar Recurso -->
                     <label for="ID_Recurso"><?php echo $strings['Seleccionar Recurso']; ?>:</label>
                     <select name="ID_Recurso" id="Recurso" required>
+                        <option value="">Selecciona un recurso</option>
                         <?php foreach ($this->recursos as $recurso) : ?>
-                            <option value="<?php echo $recurso['ID_Recurso']; ?>">
+                            <option 
+                                data-center="<?php echo $recurso['ID_Centro']; ?>" 
+                                value="<?php echo $recurso['ID_Recurso']; ?>" 
+                                <?php if($this->selectedResource === $recurso['ID_Recurso']) echo 'selected'; ?>
+                            >
                                 <?php echo $recurso['Tipo'] . ' - ' . $recurso['Descripcion']; ?>
                             </option>
                         <?php endforeach; ?>
@@ -55,6 +61,7 @@ class Incidencia_Crear_View {
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
+            <script src="../views/js/incidencias.js"></script>
         </body>
         </html>
 

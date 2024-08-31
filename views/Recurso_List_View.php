@@ -45,7 +45,7 @@ class Recurso_List_View {
                         echo "<td>{$row['Disponibilidad']}</td>";
                         echo "<td>{$row['Nombre_Centro']}</td>";
                         echo "<td>
-                                <a class='button button-view' href='Recursos_Controller.php?action=view_recursos&ID_Recurso={$row['ID_Recurso']}' title='Ver usuario'>
+                                <a class='button button-view' href='Recursos_Controller.php?action=view_recursos&ID_Recurso={$row['ID_Recurso']}' title='Ver recurso'>
                                     <img src='../views/img/show.png' alt='Ver usuario' style='width: 20px; height: 20px;'>
                                 </a>
                                 <a class='button button-edit' href='Recursos_Controller.php?action=edit_recurso&ID_Recurso={$row['ID_Recurso']}' title='Editar recurso'>
