@@ -32,8 +32,8 @@ class Reservas_Recursos_Disponibles_View {
                                 <select name="ID_Franja" id="franja" class="form-group">
                                     <?php
                                     while ($franja = $franjas->fetch_assoc()) {
-                                        // Comprobar si la franja horaria incluye la hora actual
-                                        if ($franja['Hora_Inicio'] <= $hora_actual && $franja['Hora_Fin'] >= $hora_actual) {
+                                        // Comprobar si la hora de inicio de la franja es mayor que la hora actual
+                                        if ($franja['Hora_Inicio'] > $hora_actual) {
                                             echo "<option value='{$franja['ID_Franja']}'>{$franja['Hora_Inicio']} - {$franja['Hora_Fin']}</option>";
                                         }
                                     }
