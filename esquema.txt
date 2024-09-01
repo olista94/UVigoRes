@@ -1,9 +1,0 @@
-UVigoRes/
-├── index.php
-├── UVigoRes.sql
-├── controllers/
-├── models/
-│   └── Access_DB.php
-├── views/
-└── locales/
-    └── Strings_SPANISH.php
