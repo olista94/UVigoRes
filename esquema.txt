@@ -7,5 +7,7 @@ UVigoRes/
 ├── models/
 │   └── Access_DB.php
 ├── views/
+│   └── img
+│   └── js
 └── locales/
     └── Strings_SPANISH.php
