@@ -26,7 +26,8 @@ class Recurso_Add_View {
         </head>
         <body>
             <div class="container">
-                <h1><?php echo $strings['Añadir Recurso']; ?></h1>
+            <div id="validation-message" class="error-message hidden"></div>
+            <h1><?php echo $strings['Añadir Recurso']; ?></h1>
                 <form action="Recursos_Controller.php?action=add_recurso" method="post" class="form">
 
                     <div class="form-group">
@@ -61,12 +62,13 @@ class Recurso_Add_View {
                         </select>
                     </div>
                     
-                    <button type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
+                    <button id="submit-btn" type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
                 </form>
                 <a class="button" href="Recursos_Controller.php?action=list_recursos" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
+            <script src="../views/js/validationResource.js"></script>   
         </body>
         </html>
 

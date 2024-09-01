@@ -25,6 +25,9 @@ class Recurso_List_View {
                 <h1><?php echo $strings['Lista de Recursos']; ?></h1>
                 <a class="button" href="Recursos_Controller.php?action=add_recurso"title="<?php echo $strings['Añadir Recurso']; ?>">
                     <img src="../views/img/add-resource.png" alt="<?php echo $strings['Añadir Recurso']; ?>" style="width: 20px; height: 20px;">
+                </a>
+                <a class="button" href="../index.php" title="<?php echo $strings['Volver']; ?>">
+                    <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a><br>
                 <table class="table">
                     <thead>

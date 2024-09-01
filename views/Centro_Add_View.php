@@ -26,6 +26,7 @@ class Centro_Add_View {
         </head>
         <body>
             <div class="container">
+                <div id="validation-message" class="error-message hidden"></div>
                 <h1><?php echo $strings['Añadir Centro']; ?></h1>
                 <form action="Centros_Controller.php?action=add_centro" method="post" class="form">
 
@@ -49,12 +50,13 @@ class Centro_Add_View {
                         <input type="text" name="Email" id="Email" required>
                     </div>
 
-                    <button type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
+                    <button id="submit-btn" type="submit" class="button"><?php echo $strings['Añadir']; ?></button>
                 </form>
                 <a class="button" href="Centros_Controller.php?action=list_centros" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
+            <script src="../views/js/validationCenter.js"></script> 
         </body>
         </html>
 

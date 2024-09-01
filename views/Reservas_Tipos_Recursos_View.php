@@ -30,8 +30,8 @@ class Reservas_Tipos_Recursos_View {
                                     <select name="Tipo" id="tipo" class="form-group">
                                         <?php
                                             while ($tipo = $tipos->fetch_assoc()) {
-                                                // Comprobamos si el usuario es "Estudiante" y el tipo de recurso es "Aula", "Laboratorio" o "sala"
-                                                if ($user_role === 'Estudiante' && in_array($tipo['Tipo'], ['Aula', 'Laboratorio', 'Sala'])) {
+                                                // Comprobamos si el tipo de recurso contiene las palabras clave "sala", "salon", "aula", "laboratorio"
+                                                if (preg_match('/sal|aula|laboratorio/i', $tipo['Tipo'])) {
                                                     // Si es así, no mostramos esta opción
                                                     continue;
                                                 }

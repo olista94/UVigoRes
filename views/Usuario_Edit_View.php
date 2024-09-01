@@ -26,6 +26,7 @@ class Usuario_Edit_View {
         </head>
         <body>
             <div class="container">
+                <div id="validation-message" class="error-message hidden"></div>
                 <h1 class="h1"><?php echo $strings['Editar Usuario']; ?></h1>
                 <form action="Usuarios_Controller.php?action=edit_user" method="post" class="form">
                     <input type="hidden" name="ID_Usuario" value="<?php echo htmlspecialchars($this->user_data['ID_Usuario']); ?>">
@@ -33,7 +34,7 @@ class Usuario_Edit_View {
                     <!-- Campo DNI -->
                     <div class="form-group">
                         <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
-                        <input type="text" name="DNI" id="DNI" 
+                        <input type="text" name="DNI" id="dni" 
                                value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>" 
                                <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
                         <?php if ($user_role !== 'Admin'): ?>
@@ -66,7 +67,7 @@ class Usuario_Edit_View {
                     <!-- Campo NIU -->
                     <div class="form-group">
                         <label for="NIU"><?php echo $strings['NIU']; ?>:</label>
-                        <input type="text" name="NIU" id="NIU" 
+                        <input type="text" name="NIU" id="niu" 
                                value="<?php echo htmlspecialchars($this->user_data['NIU']); ?>" 
                                <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
                         <?php if ($user_role !== 'Admin'): ?>
@@ -77,7 +78,7 @@ class Usuario_Edit_View {
                     <!-- Campo Correo Electrónico -->
                     <div class="form-group">
                         <label for="Correo_Electronico"><?php echo $strings['Correo Electrónico']; ?>:</label>
-                        <input type="email" name="Email" id="Correo_Electronico" 
+                        <input type="email" name="Email" id="email" 
                                value="<?php echo htmlspecialchars($this->user_data['Email']); ?>" required>
                     </div>
 
@@ -97,13 +98,14 @@ class Usuario_Edit_View {
                         <?php endif; ?>
                     </div>
 
-                    <button type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
+                    <button id="submit-btn" type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
                 </form>
 
                 <a class="button" href="Usuarios_Controller.php?action=list_users" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
+            <script src="../views/js/validationEditUser.js"></script> 
         </body>
         </html>
 

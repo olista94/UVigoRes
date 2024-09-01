@@ -8,6 +8,50 @@ body {
     line-height: 1.6;
 }
 
+/* Contenedor Principal */
+.message-container {
+    background-color: #ffffff; /* Fondo blanco para contraste */
+    border: 1px solid #ddd; /* Bordes ligeros para el contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 30px; /* Espacio interno */
+    text-align: center; /* Centra el texto */
+    max-width: 400px; /* Ancho máximo para evitar que se extienda demasiado */
+    width: 90%; /* Ancho relativo para dispositivos móviles */
+    margin-top: 50px;
+    margin: auto; /* Centra horizontalmente */
+}
+
+/* Título */
+.message-container h1 {
+    font-size: 28px; /* Tamaño de fuente más grande */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    color: #073349; /* Color del título */
+}
+
+/* Mensaje */
+.message-container p {
+    font-size: 18px; /* Tamaño de fuente del mensaje */
+    margin-bottom: 30px; /* Espacio debajo del mensaje */
+    line-height: 1.6; /* Altura de línea */
+}
+
+/* Enlace de Redirección */
+.message-container a {
+    display: inline-block; /* Se comporta como un botón */
+    background-color: #0056b3; /* Color de fondo */
+    color: #fff; /* Color de texto */
+    text-decoration: none; /* Sin subrayado */
+    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    transition: background-color 0.3s ease; /* Transición suave para hover */
+}
+
+.message-container a:hover {
+    background-color: #003d82; /* Color al pasar el cursor */
+}
+
 .h1 {
     font-size: 24px;
     text-align: center;
@@ -321,7 +365,7 @@ form button:hover {
 }
 
 #validation-message {
-    background-color: rgb(161, 74, 74); 
+    background-color: #FF0033;
     width: 100%; 
     padding: 5px;
     border-radius: 5px;
@@ -329,6 +373,7 @@ form button:hover {
 
 #validation-message p {
     color: white;
+    text-align: center;
 }
 
 .hidden {

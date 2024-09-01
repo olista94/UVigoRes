@@ -74,7 +74,7 @@ class Usuario_Add_View {
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
-            <script src="../views/js/validaciones.js"></script>    
+            <script src="../views/js/validationAddUser.js"></script>    
         </body>
         </html>
 

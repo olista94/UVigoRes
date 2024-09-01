@@ -25,8 +25,8 @@ class Usuario_View_View {
                 <h1><?php echo $strings['Ver Usuario']; ?></h1>
                 <table class="table">
                     <tr>
-                        <th><?php echo $strings['NIU']; ?></th>
-                        <td><?php echo $this->user_data['NIU']; ?></td>
+                        <th><?php echo $strings['DNI']; ?></th>
+                        <td><?php echo $this->user_data['DNI']; ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['Nombre']; ?></th>
@@ -37,8 +37,8 @@ class Usuario_View_View {
                         <td><?php echo $this->user_data['Apellidos']; ?></td>
                     </tr>
                     <tr>
-                        <th><?php echo $strings['DNI']; ?></th>
-                        <td><?php echo $this->user_data['DNI']; ?></td>
+                        <th><?php echo $strings['NIU']; ?></th>
+                        <td><?php echo $this->user_data['NIU']; ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['Correo Electrónico']; ?></th>

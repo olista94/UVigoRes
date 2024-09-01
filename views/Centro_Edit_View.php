@@ -26,6 +26,7 @@ class Centro_Edit_View {
         </head>
         <body>
             <div class="container">
+                <div id="validation-message" class="error-message hidden"></div>
                 <h1><?php echo $strings['Editar Centro']; ?></h1>
                 <form action="Centros_Controller.php?action=edit_centro" method="post" class="form">
                     <input type="hidden" name="ID_Centro" value="<?php echo htmlspecialchars($this->center_data['ID_Centro']); ?>">
@@ -54,10 +55,11 @@ class Centro_Edit_View {
                                 value="<?php echo htmlspecialchars($this->center_data['Email']); ?>" required>
                     </div>
 
-                    <button type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
+                    <button id="submit-btn" type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
                 </form>
                 <a class="button" href="Centros_Controller.php?action=list_centros"><?php echo $strings['Volver']; ?></a>
             </div>
+            <script src="../views/js/validationCenter.js"></script> 
         </body>
         </html>
 

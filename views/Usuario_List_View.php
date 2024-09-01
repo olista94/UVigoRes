@@ -31,14 +31,17 @@ class Usuario_List_View {
                     </form> -->
                     <a class="button" href="Usuarios_Controller.php?action=add_user" title="<?php echo $strings['Añadir Usuario']; ?>">
                         <img src="../views/img/add-user.png" alt="<?php echo $strings['Añadir Usuario']; ?>" style="width: 20px; height: 20px;">
+                    </a>
+                    <a class="button" href="../index.php" title="<?php echo $strings['Volver']; ?>">
+                        <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                     </a><br>
                     <table class="table">
                     <thead>
                         <tr>
-                            <th><?php echo $strings['NIU']; ?></th>
+                            <th><?php echo $strings['DNI']; ?></th>
                             <th><?php echo $strings['Nombre']; ?></th>
                             <th><?php echo $strings['Apellidos']; ?></th>
-                            <th><?php echo $strings['DNI']; ?></th>
+                            <th><?php echo $strings['NIU']; ?></th>
                             <th><?php echo $strings['Correo Electrónico']; ?></th>
                             <th><?php echo $strings['Rol']; ?></th>
                             <th><?php echo $strings['Acciones']; ?></th>
@@ -46,28 +49,33 @@ class Usuario_List_View {
                     </thead>
                     <tbody>
                     <?php
-                    while ($row = $this->result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>{$row['NIU']}</td>";
-                        echo "<td>{$row['Nombre']}</td>";
-                        echo "<td>{$row['Apellidos']}</td>";
-                        echo "<td>{$row['DNI']}</td>";
-                        echo "<td>{$row['Email']}</td>";
-                        echo "<td>{$row['Rol']}</td>";
-                        echo "<td>
-                                <a class='button button-view' href='Usuarios_Controller.php?action=view_user&DNI={$row['DNI']}' title='Ver usuario'>
-                                    <img src='../views/img/show.png' alt='Ver usuario' style='width: 20px; height: 20px;'>
-                                </a>
-                                <a class='button button-edit' href='Usuarios_Controller.php?action=edit_user&DNI={$row['DNI']}' title='Editar usuario'>
-                                    <img src='../views/img/edit-user.png' alt='Editar usuario' style='width: 20px; height: 20px;'>
-                                </a>
-                                <a class='button button-delete' href='Usuarios_Controller.php?action=delete_user&DNI={$row['DNI']}' title='Eliminar usuario' onclick='return confirm(\"¿Estás seguro de que quieres eliminar este usuario?\")'>
-                                    <img src='../views/img/delete-user.png' alt='Eliminar usuario' style='width: 20px; height: 20px;'>
-                                </a>
-                              </td>";
-                        echo "</tr>";
-                    }
-                    ?>
+                        while ($row = $this->result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>{$row['DNI']}</td>";
+                            echo "<td>{$row['Nombre']}</td>";
+                            echo "<td>{$row['Apellidos']}</td>";
+                            echo "<td>{$row['NIU']}</td>";
+                            echo "<td>{$row['Email']}</td>";
+                            echo "<td>{$row['Rol']}</td>";
+                            echo "<td>
+                                    <a class='button button-view' href='Usuarios_Controller.php?action=view_user&DNI={$row['DNI']}' title='Ver usuario'>
+                                        <img src='../views/img/show.png' alt='Ver usuario' style='width: 20px; height: 20px;'>
+                                    </a>
+                                    <a class='button button-edit' href='Usuarios_Controller.php?action=edit_user&DNI={$row['DNI']}' title='Editar usuario'>
+                                        <img src='../views/img/edit-user.png' alt='Editar usuario' style='width: 20px; height: 20px;'>
+                                    </a>";
+                        
+                            // Verifica si el usuario NO es Admin para mostrar el botón de eliminar
+                            if ($row['Rol'] !== 'Admin') {
+                                echo "<a class='button button-delete' href='Usuarios_Controller.php?action=delete_user&DNI={$row['DNI']}' title='Eliminar usuario' onclick='return confirm(\"¿Estás seguro de que quieres eliminar este usuario?\")'>
+                                        <img src='../views/img/delete-user.png' alt='Eliminar usuario' style='width: 20px; height: 20px;'>
+                                      </a>";
+                            }
+                        
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
                 

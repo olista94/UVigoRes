@@ -82,6 +82,7 @@ switch ($_REQUEST['action']) {
                 $model = new Usuarios_Model('', '', '', '', $dni_to_edit, '', '', '');
                 $user_data = $model->rellenadatos()->fetch_array();
     
+                $user_data = $model->rellenadatos()->fetch_array();
                 if (!$user_data) {
                     new MESSAGE('Usuario no encontrado', 'Usuarios_Controller.php?action=list_users');
                     exit();
@@ -178,11 +179,16 @@ switch ($_REQUEST['action']) {
         if ($_SESSION['rol'] === 'Admin') {
             $model = new Usuarios_Model('', '', '', '', $_REQUEST['DNI'], '', '', '');
             $result = $model->delete();
-            new MESSAGE($result, 'Usuarios_Controller.php?action=list_users');
+    
+            if ($result === 'No se puede eliminar un usuario con rol Admin') {
+                new MESSAGE($result, 'Usuarios_Controller.php?action=list_users');
+            } else {
+                new MESSAGE($result, 'Usuarios_Controller.php?action=list_users');
+            }
         } else {
             header('Location: ../index.php');
         }
-        break;
+        break;    
 
     default:
         header('Location: ../index.php');

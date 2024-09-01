@@ -117,7 +117,7 @@ class Incidencias_Model {
 
     // Método para obtener usuarios de tipo Becario o Personal de Conserjería
     function getBecariosYConserjes() {
-        $sql = "SELECT ID_Usuario, Nombre, Apellidos, Rol FROM Usuario WHERE Rol IN ('Becario de infraestrucura', 'Personal de conserjeria')";
+        $sql = "SELECT ID_Usuario, Nombre, Apellidos, Rol FROM Usuario WHERE Rol IN ('Becario de infraestructura', 'Personal de conserjeria')";
         $result = $this->mysqli->query($sql);
 
         if ($result === false) {

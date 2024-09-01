@@ -37,12 +37,18 @@
             echo "<a href='Controllers/Incidencias_Controller.php?action=list_all_incidencias'>Ver todas las incidencias</a>";
         }
 
-        if ($user_role === 'Personal de conserjeria' || $user_role === 'Becario de infraestrucura') {
-            // Opciones para el rol Personal de conserjeria y Becario de infraestrucura
+        if ($user_role === 'Personal de conserjeria') {
+            // Opciones para el rol Personal de conserjeria y Becario de infraestructura
             echo "<a href='Controllers/Reservas_Controller.php?action=ver_reservas'>Ver reservas del día</a>";
             echo '<a href="Controllers/Reservas_Controller.php?action=historico">Histórico de reservas</a>';
             echo "<a href='Controllers/Incidencias_Controller.php?action=list_all_incidencias'>Ver todas las incidencias</a>";
-            echo "<a href='Controllers/Incidencias_Controller.php?action=list_incidencias_asignadas'>Ver mis incidencias asignadas</a>"; // Nueva opción añadida
+            echo "<a href='Controllers/Incidencias_Controller.php?action=list_incidencias_asignadas'>Ver mis incidencias asignadas</a>";
+        }
+
+        if ($user_role === 'Becario de infraestructura') {
+            // Opciones para el rol Personal de conserjeria y Becario de infraestructura
+            echo "<a href='Controllers/Incidencias_Controller.php?action=list_all_incidencias'>Ver todas las incidencias</a>";
+            echo "<a href='Controllers/Incidencias_Controller.php?action=list_incidencias_asignadas'>Ver mis incidencias asignadas</a>";
         }
 
         if ($user_role === 'Docente' ||  $user_role === 'Estudiante') {

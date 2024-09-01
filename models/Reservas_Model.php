@@ -20,56 +20,6 @@ class Reservas_Model {
         $this->mysqli = ConnectDB();
     }
 
-    // public function get_reservas_by_date($date) {
-    //     $sql = "SELECT 
-    //                 r.ID_Reserva,
-    //                 u.Nombre AS NombreUsuario,
-    //                 r.TipoRecurso,
-    //                 r.Hora_Inicio,
-    //                 r.Hora_Fin,
-    //                 r.Estado
-    //             FROM Reserva r
-    //             JOIN Usuario u ON r.ID_Usuario = u.ID_Usuario
-    //             WHERE DATE(r.Fecha_Hora_Reserva) = ?";
-        
-    //     $stmt = $this->mysqli->prepare($sql);
-    //     $stmt->bind_param('s', $date);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    
-    //     if ($result === false) {
-    //         return null;  // Retornar null o manejar el error adecuadamente
-    //     }
-        
-    //     return $result;  // Retorna el objeto mysqli_result
-    // }
-    
-    // public function get_reservas_by_date($date) {
-    //     $sql = "SELECT 
-    //                 r.ID_Reserva,
-    //                 u.Nombre AS NombreUsuario,
-    //                 rec.Tipo AS TipoRecurso,
-    //                 f.Hora_Inicio,
-    //                 f.Hora_Fin,
-    //                 r.Estado
-    //             FROM Reserva r
-    //             JOIN Usuario u ON r.ID_Usuario = u.ID_Usuario
-    //             JOIN Recurso rec ON r.ID_Recurso = rec.ID_Recurso
-    //             JOIN Franja f ON r.ID_Franja = f.ID_Franja
-    //             WHERE DATE(r.Fecha_Hora_Reserva) = ?";
-        
-    //     $stmt = $this->mysqli->prepare($sql);
-    //     $stmt->bind_param('s', $date);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    
-    //     if ($result === false) {
-    //         return null;  // Retornar null o manejar el error adecuadamente
-    //     }
-        
-    //     return $result;  // Retorna el objeto mysqli_result
-    // }
-
     public function get_reservas_by_date($date) {
         $sql = "SELECT 
                     r.ID_Reserva,

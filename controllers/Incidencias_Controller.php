@@ -24,7 +24,7 @@ if (!isset($_REQUEST['action'])) {
 switch ($_REQUEST['action']) {
 
     case 'list_all_incidencias':
-        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Becario de infraestrucura' || $_SESSION['rol'] === 'Personal de conserjeria') {
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Becario de infraestructura' || $_SESSION['rol'] === 'Personal de conserjeria') {
             $model = new Incidencias_Model('','','','','','');
             $result = $model->getAllIncidencias(); // Obtén todas las incidencias
             new Incidencia_List_View($result);
@@ -34,7 +34,7 @@ switch ($_REQUEST['action']) {
         break;
 
     case 'view_incidencia':
-        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Becario de infraestrucura' || $_SESSION['rol'] === 'Personal de conserjeria') {
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Becario de infraestructura' || $_SESSION['rol'] === 'Personal de conserjeria') {
             $ID_Incidencia = $_GET['ID_Incidencia'];
             $model = new Incidencias_Model($ID_Incidencia, '', '', '', '', '');
             $incidencia = $model->getIncidenciaById();
@@ -65,7 +65,6 @@ switch ($_REQUEST['action']) {
         }
         break;
         
-
     case 'assign':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $ID_Incidencia = $_POST['ID_Incidencia'];
@@ -112,7 +111,6 @@ switch ($_REQUEST['action']) {
         }
         break;
         
-
     case 'add':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $ID_Usuario = $_POST['ID_Usuario'];
@@ -162,7 +160,7 @@ switch ($_REQUEST['action']) {
         break;
 
     case 'list_incidencias_asignadas':
-        if ($_SESSION['rol'] === 'Becario de infraestrucura' || $_SESSION['rol'] === 'Personal de conserjeria') {
+        if ($_SESSION['rol'] === 'Becario de infraestructura' || $_SESSION['rol'] === 'Personal de conserjeria') {
             $ID_Usuario = $_SESSION['ID_Usuario']; // Asumiendo que el ID del usuario está almacenado en la sesión
             $model = new Incidencias_Model('', '', '', '', '', '');
             $result = $model->getIncidenciasAsignadasPendientes($ID_Usuario);
@@ -173,7 +171,7 @@ switch ($_REQUEST['action']) {
         break;
 
     case 'marcar_resuelta':
-        if ($_SESSION['rol'] === 'Becario de infraestrucura' || $_SESSION['rol'] === 'Personal de conserjeria') {
+        if ($_SESSION['rol'] === 'Becario de infraestructura' || $_SESSION['rol'] === 'Personal de conserjeria') {
             if (isset($_GET['ID_Incidencia'])) {
                 $ID_Incidencia = $_GET['ID_Incidencia'];
                 $model = new Incidencias_Model('', '', '', '', '', '');

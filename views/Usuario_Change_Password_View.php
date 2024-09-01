@@ -21,6 +21,7 @@ class Usuario_Change_Password_View {
         </head>
         <body>
             <div class="container">
+                <div id="validation-message" class="error-message hidden"></div>
                 <h1 class="h1"><?php echo $strings['Cambiar Contraseña']; ?></h1>
                 <form action="Usuarios_Controller.php?action=update_password" method="post" class="form">
                     <!-- Campo oculto para ID_Usuario -->
@@ -39,13 +40,14 @@ class Usuario_Change_Password_View {
                                placeholder="<?php echo $strings['Confirmar Contraseña']; ?>" required>
                     </div>
 
-                    <button type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
+                    <button id="submit-btn" type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
                 </form>
 
                 <a class="button" href="Usuarios_Controller.php?action=list_users" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
+            <script src="../views/js/validationPassword.js"></script>   
         </body>
         </html>
 

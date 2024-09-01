@@ -66,12 +66,13 @@ class Usuarios_Model {
 
     function edit() {
         $sql = "UPDATE Usuario SET 
+                DNI = ?,
                 NIU = ?, 
                 Nombre = ?, 
                 Apellidos = ?, 
                 Email = ?, 
                 Rol = ?, 
-                Contrasena = ? 
+                Contrasena = ?
               WHERE ID_Usuario = ?";
 
         $stmt = $this->mysqli->prepare($sql);
@@ -80,7 +81,7 @@ class Usuarios_Model {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
 
-        $stmt->bind_param('ssssssi', $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Usuario);
+        $stmt->bind_param('sssssssi', $this->DNI, $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Usuario);
         if (!$stmt->execute()) {
             return 'Error en la modificación';
         } else {
@@ -135,19 +136,36 @@ class Usuarios_Model {
     }
 
     function delete() {
+        // Verificar si el usuario a eliminar es un Admin
+        $sql = "SELECT Rol FROM Usuario WHERE DNI = ?";
+        $stmt = $this->mysqli->prepare($sql);
+        if ($stmt === false) {
+            return 'Error al preparar la consulta: ' . $this->mysqli->error;
+        }
+    
+        $stmt->bind_param('s', $this->DNI);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user_to_delete = $result->fetch_assoc();
+    
+        if ($user_to_delete['Rol'] === 'Admin') {
+            return 'No se puede eliminar un usuario con rol Admin';
+        }
+    
+        // Proceder con la eliminación si no es Admin
         $sql = "DELETE FROM Usuario WHERE DNI = ?";
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
-
+    
         $stmt->bind_param('s', $this->DNI);
         if (!$stmt->execute()) {
             return 'Error al borrar';
         } else {
             return 'Borrado correctamente';
         }
-    }
+    }    
 
     function rellenadatos() {
         $sql = "SELECT * FROM Usuario WHERE DNI = ?";
@@ -155,12 +173,18 @@ class Usuarios_Model {
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
-
+    
         $stmt->bind_param('s', $this->DNI);
         $stmt->execute();
-        return $stmt->get_result();
+        $result = $stmt->get_result();
+    
+        // Verificar si se encontró algún resultado
+        if ($result->num_rows > 0) {
+            return $result;
+        } else {
+            return false; // No se encontró ningún usuario
+        }
     }
-
     function getRoles() {
         $roles = array();
         

@@ -12,7 +12,7 @@ class Incidencia_Asignada_List_View {
         include '../Locales/Strings_SPANISH.php';
 
         // Verificar si el usuario tiene el rol adecuado
-        if ($_SESSION['rol'] !== 'Becario de infraestrucura' && $_SESSION['rol'] !== 'Personal de conserjeria') {
+        if ($_SESSION['rol'] !== 'Becario de infraestructura' && $_SESSION['rol'] !== 'Personal de conserjeria') {
             header('Location: ../index.php');
             exit();
         }

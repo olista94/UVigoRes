@@ -9,16 +9,16 @@ Aplicacion para reservar recursos
 
 # Usuarios para el proyecto UVigoRes
 
--------------------------------------------------------------------------
-|									|
-|			  USUARIOS POR DEFECTO				|		
-|									|
-|-----------------------------------------------------------------------|
-|	DNI	|	PASSWORD	|	TIPO		|
-|-----------------------|-----------------------|-----------------------|
-|	admin           |	ContrasenaAdmin1	| 	Admin 	|						
-|	12345682E	|	ContrasenaConserje1	|	Conserje      |
-|	12345679B	|	ContrasenaBecario1	|	Becario      |
+---------------------------------------------------------------------------------
+|										|
+|			  USUARIOS POR DEFECTO					|		
+|										|
+|-------------------------------------------------------------------------------|
+|	DNI		|	PASSWORD		|	TIPO		|
+|-----------------------|-------------------------------|-----------------------|
+|	admin           |	ContrasenaAdmin1	| 	Admin 		|						
+|	12345682E	|	ContrasenaConserje1	|	Conserje      	|
+|	12345679B	|	ContrasenaBecario1	|	Becario      	|
 |	12345688K	|	ContrasenaEstudiante1	|	Estudiante      |
-|	12345685H	|	ContrasenaDocente1	|	Docente     |
--------------------------------------------------------------------------
+|	12345685H	|	ContrasenaDocente1	|	Docente     	|
+---------------------------------------------------------------------------------
