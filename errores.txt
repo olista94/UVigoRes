@@ -1,4 +1,0 @@
-Errores:
-
-- Al confimar la reserva me da este error: 
-Error al confirmar la reserva: Reserva confirmada exitosamente.
