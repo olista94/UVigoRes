@@ -37,7 +37,7 @@ CREATE TABLE Recurso (
     Descripcion TEXT NOT NULL,
     Disponibilidad ENUM('Disponible', 'No disponible') NOT NULL,
     ID_Centro INT NOT NULL,
-    FOREIGN KEY (ID_Centro) REFERENCES Centro(ID_Centro)
+    FOREIGN KEY (ID_Centro) REFERENCES Centro(ID_Centro) ON DELETE CASCADE
 );
 
 -- Creación de la tabla Franja
@@ -251,7 +251,7 @@ INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) VALUES
 ('12345686I', 'Miguel', 'Gómez', '005000010008', 'miguel.gomez@uvigo.es', 'Docente', 'ContrasenaDocente1'),
 ('12345687J', 'Sara', 'Díaz', '005000010009', 'sara.diaz@uvigo.es', 'Docente', 'ContrasenaDocente1'),
 ('12345688K', 'Raúl', 'Alonso', '005000010010', 'raul.alonso@uvigo.es', 'Estudiante', 'ContrasenaEstudiante1'),
-('12345689L', 'Marta', 'Sánchez', '005000010011', 'marta.sanchez@uvigo.es', 'Estudiante', 'ContrasenaEstudiante'),
+('12345689L', 'Marta', 'Sánchez', '005000010011', 'marta.sanchez@uvigo.es', 'Estudiante', 'ontrasenaEstudiante'),
 ('12345690M', 'David', 'Jiménez', '005000010012', 'david.jimenez@uvigo.es', 'Estudiante', 'ContrasenaEstudiante1'),
 ('12345691N', 'Sandra', 'Ruiz', '005000010013', 'sandra.ruiz@uvigo.es', 'Estudiante', 'ContrasenaEstudiante1'),
 ('12345692O', 'Alberto', 'Hernández', '005000010014', 'alberto.hernandez@uvigo.es', 'Estudiante', 'ContrasenaEstudiante1'),
