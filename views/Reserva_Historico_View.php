@@ -41,6 +41,7 @@ class Reserva_Historico_View {
                             <th><?php echo $strings['Hora Inicio']; ?></th>
                             <th><?php echo $strings['Hora Fin']; ?></th>
                             <th><?php echo $strings['Estado']; ?></th>
+                            <th><?php echo $strings['Día']; ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,12 +51,13 @@ class Reserva_Historico_View {
                         if ($isAdmin) {
                             echo "<td>{$row['NombreUsuario']} {$row['ApellidosUsuario']}</td>";
                         }
-                        echo "<td>{$row['TipoRecurso']}</td>";
+                        echo "<td>{$row['DescripcionRecurso']}</td>";
                         echo "<td>{$row['NombreCentro']}</td>";
                         echo "<td>{$row['FechaReserva']}</td>";
                         echo "<td>{$row['Hora_Inicio']}</td>";
                         echo "<td>{$row['Hora_Fin']}</td>";
                         echo "<td>{$row['Estado']}</td>";
+                        echo "<td>{$row['Fecha_Disfrute_Reserva']}</td>";
                         echo "</tr>";
                     }
                     ?>

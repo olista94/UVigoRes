@@ -9,10 +9,9 @@ class Usuario_Add_View {
         include '../Locales/Strings_SPANISH.php';
         include_once '../models/Usuarios_Model.php'; // Incluir el modelo de usuarios
         
-        // $usuariosModel = new Usuarios_Model(); // Crear una instancia del modelo de usuarios
-        $usuariosModel = new Usuarios_Model(null, null, null, null, null, null, null, null); // Crear una instancia del modelo de usuarios
+        $usuariosModel = new Usuarios_Model(null, null, null, null, null, null, null, null, null); // Crear una instancia del modelo de usuarios
         $roles = $usuariosModel->getRoles(); // Obtener los roles desde el modelo
-
+        $centros = $usuariosModel->getCentros(); // Obtener los centros desde el modelo
         ?>
 
         <!DOCTYPE html>
@@ -60,6 +59,15 @@ class Usuario_Add_View {
                                 <?php foreach ($roles as $rol): ?>
                                     <option value="<?php echo $rol; ?>"><?php echo $rol; ?></option>
                                  <?php endforeach; ?>
+                            </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Centro"><?php echo $strings['Centro']; ?>:</label>
+                            <select name="Centro" id="Centro" required>
+                                <?php foreach ($centros as $id_centro => $nombre_centro): ?>
+                                    <option value="<?php echo $id_centro; ?>"><?php echo $nombre_centro; ?></option>
+                                <?php endforeach; ?>
                             </select>
                     </div>
 

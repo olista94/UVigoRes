@@ -184,23 +184,13 @@ form {
     font-size: 16px;
 }
 
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-/* Specific styling for the role select */
-#usuario {
-    width: 100%;
+/* Specific styling for the selectors */
+select {
     background-color: #fff;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    padding: 10px;
     padding-right: 30px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -208,56 +198,15 @@ form {
     background-repeat: no-repeat;
     background-position: right 10px center;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-#usuario:hover {
-    border-color: #073349;
-}
-
-/* Specific styling for the role select */
-#Recurso {
     width: 100%;
-    background-color: #fff;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     padding: 10px;
-    padding-right: 30px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-#Recurso:hover {
+select:hover {
     border-color: #073349;
 }
 
-/* Specific styling for the role select */
-#Rol {
-    background-color: #fff;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    padding: 10px;
-    padding-right: 30px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-#Rol:hover {
-    border-color: #073349;
-}
-
-#Rol:disabled {
+select:disabled {
     background-color: #e9ecef;
     color: #6c757d;
     cursor: not-allowed;
@@ -334,6 +283,14 @@ form button:hover {
 
 .button-confirm:hover {
     background-color: #218838;
+}
+
+.button-return {
+    background-color: #2855a7; /* Green */
+}
+
+.button-return:hover {
+    background-color: #2b2188;
 }
 
 .button-delete {

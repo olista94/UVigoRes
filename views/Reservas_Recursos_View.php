@@ -1,11 +1,11 @@
 <?php
 
 class Reservas_Recursos_View {
-    function __construct($ID_Centro, $Tipo, $recursos) {
-        $this->render($ID_Centro, $Tipo, $recursos);
+    function __construct($ID_Centro, $Tipo, $recursos, $franja, $day) {
+        $this->render($ID_Centro, $Tipo, $recursos, $franja, $day);
     }
 
-    function render($ID_Centro, $Tipo, $recursos) {
+    function render($ID_Centro, $Tipo, $recursos, $franja, $day) {
         $user_role = $_SESSION['rol'];
         include '../Locales/Strings_SPANISH.php';
         include_once '../models/Usuarios_Model.php';
@@ -23,9 +23,11 @@ class Reservas_Recursos_View {
         <body>
             <div class="container">
                 <h1 class="h1"><?php echo $strings['Seleccionar Recurso']; ?></h1>
-                    <form action="Reservas_Controller.php?action=select_franja" method="post">
+                    <form action="Reservas_Controller.php?action=crear_reserva" method="post">
                         <input type="hidden" name="ID_Centro" value="<?php echo $ID_Centro; ?>">
                         <input type="hidden" name="Tipo" value="<?php echo $Tipo; ?>">
+                        <input type="hidden" name="Franja" value="<?php echo $franja; ?>">
+                        <input type="hidden" name="Day" value="<?php echo $day; ?>">
                         <div class="form-group">
                             <label for="tipo"><?php echo $strings['Recurso']; ?></label>
                                 <select name="ID_Recurso" id="recurso" class="form-group">

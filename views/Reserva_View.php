@@ -55,6 +55,10 @@ class Reserva_View {
                         <th><?php echo $strings['Estado']; ?></th>
                         <td><?php echo $this->reservation_data['Estado']; ?></td>
                     </tr>
+                    <tr>
+                        <th><?php echo $strings['Día']; ?></th>
+                        <td><?php echo $this->reservation_data['Fecha_Disfrute_Reserva']; ?></td>
+                    </tr>
                 </table>
                 <a class="button" href="Reservas_Controller.php?action=ver_reservas_usuario" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">

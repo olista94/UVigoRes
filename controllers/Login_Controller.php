@@ -41,22 +41,22 @@ switch ($_REQUEST['action']) {
         $Contrasena = $data['Contrasena'];
 
         // Creamos el objeto usuario con el DNI y contraseña
-        $usuario = new Usuarios_Model('', '', '', '', $DNI, '', '', $Contrasena);
+        $usuario = new Usuarios_Model('', $DNI, '', '', '', '', '', $Contrasena, '');
         $respuesta = $usuario->login(); // Hacemos login y guardamos respuesta
 
         // Si la respuesta es afirmativa
-        if ($respuesta === true) {
+        if ($respuesta) {
             $_SESSION['login'] = $DNI; // Guardamos datos de sesión
-            // Recogemos más datos del usuario, si es necesario
-            $usuario->rellenadatos(); // Esto debería devolver los datos del usuario
 
             // Almacena más detalles del usuario si es necesario
             $usuarioData = $usuario->rellenadatos()->fetch_array();
+            
             $_SESSION['ID_Usuario'] = $usuarioData['ID_Usuario'];
             $_SESSION['nombre'] = $usuarioData['Nombre'];
             $_SESSION['apellidos'] = $usuarioData['Apellidos'];
             $_SESSION['correo'] = $usuarioData['Correo_Electronico'];
             $_SESSION['rol'] = $usuarioData['Rol'];
+            $_SESSION['ID_Centro'] = $usuarioData['ID_Centro'];
 
             header('Location: ../index.php'); // Redirige al índice
         } else {

@@ -33,6 +33,7 @@ class Reserva_List_View {
                             <th><?php echo $strings['Hora Inicio']; ?></th>
                             <th><?php echo $strings['Hora Fin']; ?></th>
                             <th><?php echo $strings['Estado']; ?></th>
+                            <th><?php echo $strings['Devuelto']; ?></th>
                             <th><?php echo $strings['Acciones']; ?></th>
                         </tr>
                     </thead>
@@ -46,12 +47,18 @@ class Reserva_List_View {
                         echo "<td>{$row['Hora_Inicio']}</td>";
                         echo "<td>{$row['Hora_Fin']}</td>";
                         echo "<td>{$row['Estado']}</td>";
+                        echo "<td>{$row['Devuelto']}</td>";
                         echo "<td>";
                         // Botón de confirmar reserva (solo si no está confirmada)
                         if ($row['Estado'] != 'Confirmada') {
                             echo "<a class='button button-confirm' href='Reservas_Controller.php?action=confirm_reserva&ID_Reserva={$row['ID_Reserva']}' title='Confirmar reserva'>
                                     <img src='../views/img/check.png' alt='Confirmar reserva' style='width: 20px; height: 20px;'>
                                   </a>";
+                        }
+                        if ($row['Devuelto'] != 1 && $row['Estado'] == 'Confirmada') {
+                        echo "<a class='button button-return' href='Reservas_Controller.php?action=devuelta&ID_Reserva={$row['ID_Reserva']}' title='Confirmar devolucion'>
+                                <img src='../views/img/return.png' alt='Recurso devuelto' style='width: 20px; height: 20px;'>
+                              </a>";
                         }
                         echo "<a class='button button-delete' href='Reservas_Controller.php?action=delete_reserva&ID_Reserva={$row['ID_Reserva']}' title='Eliminar reserva' onclick='return confirm(\"¿Estás seguro de que quieres eliminar esta reserva?\")'>
                                 <img src='../views/img/delete.png' alt='Eliminar reserva' style='width: 20px; height: 20px;'>

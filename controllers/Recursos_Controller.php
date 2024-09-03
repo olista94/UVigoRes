@@ -7,6 +7,7 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
+include_once '../Models/Centros_Model.php';
 include_once '../Models/Recursos_Model.php';
 include_once '../Views/Recurso_List_View.php';
 include_once '../Views/Recurso_Edit_View.php';
@@ -21,17 +22,21 @@ if (!isset($_REQUEST['action'])) {
 
 switch ($_REQUEST['action']) {
     case 'list_recursos':
-        if ($_SESSION['rol'] === 'Admin') {
-            $model = new Recursos_Model('', '', '', '', '');
-            $result = $model->search(); // Obtén todos los recursos
-            new Recurso_List_View($result);
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Personal de conserjeria') {
+            $centroID = $_GET['ID_Centro'] ?? null;
+            $model = new Recursos_Model('', '', '', '', $centroID);
+            $result = $model->search();
+            $centerModel = new Centros_Model('', '', '', '', '');
+            $centers = $centerModel->search();
+
+            new Recurso_List_View($result, $centers);
         } else {
             header('Location: ../index.php');
         }
         break;
     
     case 'view_recursos':
-        if ($_SESSION['rol'] === 'Admin') {
+        if ($_SESSION['rol'] === 'Admin' || $_SESSION['rol'] === 'Personal de conserjeria') {
             $model = new Recursos_Model($_REQUEST['ID_Recurso'], '', '', '', '');
             $recurso_data = $model->rellenadatos()->fetch_array();
             

@@ -1,8 +1,9 @@
 <?php
 
 class Recurso_List_View {
-    function __construct($result) {
+    function __construct($result, $centers) {
         $this->result = $result;
+        $this->centers = $centers;
         $this->render();
     }
 
@@ -28,7 +29,19 @@ class Recurso_List_View {
                 </a>
                 <a class="button" href="../index.php" title="<?php echo $strings['Volver']; ?>">
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
-                </a><br>
+                </a>
+                <select name="CentroID">
+                    <?php
+                        while ($center = $this->centers->fetch_assoc()) {
+                            if ($center['ID_Centro'] == $_GET['ID_Centro']) {
+                                echo "<option value=\"{$center['ID_Centro']}\" selected>{$center['Nombre']}</option>";
+                                continue;
+                            }
+
+                            echo "<option value=\"{$center['ID_Centro']}\">{$center['Nombre']}</option>";
+                        }
+                    ?>
+                </select>
                 <table class="table">
                     <thead>
                         <tr>
@@ -66,6 +79,7 @@ class Recurso_List_View {
                     <img src="../views/img/turn-back.png" alt="<?php echo $strings['Volver']; ?>" style="width: 20px; height: 20px;">
                 </a>
             </div>
+            <script src="../views/js/recursos.js"></script>
         </body>
         </html>
 

@@ -30,6 +30,7 @@ class Reserva_List_User_View {
                             <th><?php echo $strings['Hora Inicio']; ?></th>
                             <th><?php echo $strings['Hora Fin']; ?></th>
                             <th><?php echo $strings['Estado']; ?></th>
+                            <th><?php echo $strings['Día']; ?></th>
                             <th><?php echo $strings['Acciones']; ?></th>
                         </tr>
                     </thead>
@@ -41,6 +42,7 @@ class Reserva_List_User_View {
                         echo "<td>{$row['Hora_Inicio']}</td>";
                         echo "<td>{$row['Hora_Fin']}</td>";
                         echo "<td>{$row['Estado']}</td>";
+                        echo "<td>{$row['Fecha_Disfrute_Reserva']}</td>";
                         echo "<td>
                                 <a class='button button-view' href='Reservas_Controller.php?action=view_reserva&ID_Reserva={$row['ID_Reserva']}' title='Ver reserva'>
                                     <img src='../views/img/show.png' alt='Ver reserva' style='width: 20px; height: 20px;'>

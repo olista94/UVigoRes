@@ -26,27 +26,31 @@ class Usuario_View_View {
                 <table class="table">
                     <tr>
                         <th><?php echo $strings['DNI']; ?></th>
-                        <td><?php echo $this->user_data['DNI']; ?></td>
+                        <td><?php echo htmlspecialchars($this->user_data['DNI']); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['Nombre']; ?></th>
-                        <td><?php echo $this->user_data['Nombre']; ?></td>
+                        <td><?php echo htmlspecialchars($this->user_data['Nombre']); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['Apellidos']; ?></th>
-                        <td><?php echo $this->user_data['Apellidos']; ?></td>
+                        <td><?php echo htmlspecialchars($this->user_data['Apellidos']); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['NIU']; ?></th>
-                        <td><?php echo $this->user_data['NIU']; ?></td>
+                        <td><?php echo htmlspecialchars($this->user_data['NIU']); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['Correo Electrónico']; ?></th>
-                        <td><?php echo $this->user_data['Email']; ?></td>
+                        <td><?php echo htmlspecialchars($this->user_data['Email']); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $strings['Rol']; ?></th>
-                        <td><?php echo $this->user_data['Rol']; ?></td>
+                        <td><?php echo htmlspecialchars($this->user_data['Rol']); ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $strings['Centro']; ?></th>
+                        <td><?php echo htmlspecialchars($this->user_data['Nombre_Centro']); ?></td>
                     </tr>
                 </table>
                 <a class="button" href="Usuarios_Controller.php?action=list_users" title="<?php echo $strings['Volver']; ?>">

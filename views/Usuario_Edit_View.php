@@ -11,8 +11,9 @@ class Usuario_Edit_View {
         include '../Locales/Strings_SPANISH.php';
         include_once '../models/Usuarios_Model.php';
         
-        $usuariosModel = new Usuarios_Model(null, null, null, null, null, null, null, null);
+        $usuariosModel = new Usuarios_Model(null, null, null, null, null, null, null, null, null);
         $roles = $usuariosModel->getRoles();
+        $centros = $usuariosModel->getCentros();
         ?>
 
         <!DOCTYPE html>
@@ -36,7 +37,7 @@ class Usuario_Edit_View {
                         <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
                         <input type="text" name="DNI" id="dni" 
                                value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>" 
-                               <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                               <?php echo $user_role !== 'Admin' ? 'readonly' : ''; ?> required>
                         <?php if ($user_role !== 'Admin'): ?>
                             <input type="hidden" name="DNI" value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>">
                         <?php endif; ?>
@@ -97,6 +98,23 @@ class Usuario_Edit_View {
                             <input type="hidden" name="Rol" value="<?php echo htmlspecialchars($this->user_data['Rol']); ?>">
                         <?php endif; ?>
                     </div>
+
+                    <!-- Campo Centro -->
+                    <div class="form-group">
+                        <label for="Centro"><?php echo $strings['Centro']; ?>:</label>
+                        <select name="Centro" id="Centro" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                            <?php foreach ($centros as $id_centro => $nombre_centro): ?>
+                                <option value="<?php echo htmlspecialchars($id_centro); ?>" 
+                                        <?php if ($id_centro == $this->user_data['ID_Centro']) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($nombre_centro); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?php if ($user_role !== 'Admin'): ?>
+                            <input type="hidden" name="Centro" value="<?php echo htmlspecialchars($this->user_data['ID_Centro']); ?>">
+                        <?php endif; ?>
+                    </div>
+
 
                     <button id="submit-btn" type="submit" class="button"><?php echo $strings['Guardar Cambios']; ?></button>
                 </form>
