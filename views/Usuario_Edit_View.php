@@ -36,11 +36,8 @@ class Usuario_Edit_View {
                     <div class="form-group">
                         <label for="DNI"><?php echo $strings['DNI']; ?>:</label>
                         <input type="text" name="DNI" id="dni" 
-                               value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>" 
-                               <?php echo $user_role !== 'Admin' ? 'readonly' : ''; ?> required>
-                        <?php if ($user_role !== 'Admin'): ?>
-                            <input type="hidden" name="DNI" value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>">
-                        <?php endif; ?>
+                            value="<?php echo htmlspecialchars($this->user_data['DNI']); ?>" 
+                            readonly required>
                     </div>
 
                     <!-- Campo Nombre -->
@@ -102,7 +99,7 @@ class Usuario_Edit_View {
                     <!-- Campo Centro -->
                     <div class="form-group">
                         <label for="Centro"><?php echo $strings['Centro']; ?>:</label>
-                        <select name="Centro" id="Centro" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
+                        <select name="ID_Centro" id="Centro" <?php echo $user_role !== 'Admin' ? 'disabled' : ''; ?> required>
                             <?php foreach ($centros as $id_centro => $nombre_centro): ?>
                                 <option value="<?php echo htmlspecialchars($id_centro); ?>" 
                                         <?php if ($id_centro == $this->user_data['ID_Centro']) echo 'selected'; ?>>
@@ -111,7 +108,7 @@ class Usuario_Edit_View {
                             <?php endforeach; ?>
                         </select>
                         <?php if ($user_role !== 'Admin'): ?>
-                            <input type="hidden" name="Centro" value="<?php echo htmlspecialchars($this->user_data['ID_Centro']); ?>">
+                            <input type="hidden" name="ID_Centro" value="<?php echo htmlspecialchars($this->user_data['ID_Centro']); ?>">
                         <?php endif; ?>
                     </div>
 

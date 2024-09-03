@@ -8,13 +8,16 @@ class Reservas_Model {
     var $ID_Franja;
     var $Estado;
 
-    function __construct($ID_Reserva, $ID_Usuario, $ID_Recurso, $Fecha_Hora_Reserva, $ID_Franja, $Estado) {
+    var $Fecha_Disfrute_Reserva;
+
+    function __construct($ID_Reserva, $ID_Usuario, $ID_Recurso, $Fecha_Hora_Reserva, $ID_Franja, $Estado, $Fecha_Disfrute_Reserva = null) {
         $this->ID_Reserva = $ID_Reserva;
         $this->ID_Usuario = $ID_Usuario;
         $this->ID_Recurso = $ID_Recurso;
         $this->Fecha_Hora_Reserva = $Fecha_Hora_Reserva;
         $this->ID_Franja = $ID_Franja;
         $this->Estado = $Estado;
+        $this->Fecha_Disfrute_Reserva = $Fecha_Disfrute_Reserva;
 
         include_once 'Access_DB.php';
         $this->mysqli = ConnectDB();
@@ -29,13 +32,15 @@ class Reservas_Model {
                     c.Nombre AS NombreCentro,
                     f.Hora_Inicio,
                     f.Hora_Fin,
-                    r.Estado
+                    r.Estado,
+                    r.Devuelto,
+                    r.Fecha_Disfrute_Reserva AS Fecha_Disfrute_Reserva
                 FROM Reserva r
                 JOIN Usuario u ON r.ID_Usuario = u.ID_Usuario
                 JOIN Recurso rec ON r.ID_Recurso = rec.ID_Recurso
                 JOIN Centro c ON rec.ID_Centro = c.ID_Centro
                 JOIN Franja f ON r.ID_Franja = f.ID_Franja
-                WHERE DATE(r.Fecha_Hora_Reserva) = ?";
+                WHERE DATE(r.Fecha_Disfrute_Reserva) = ?";
         
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('s', $date);
@@ -56,7 +61,8 @@ class Reservas_Model {
                     rec.Tipo AS TipoRecurso,
                     f.Hora_Inicio,
                     f.Hora_Fin,
-                    r.Estado
+                    r.Estado,
+                    r.Fecha_Disfrute_Reserva AS Fecha_Disfrute_Reserva
                 FROM Reserva r
                 JOIN Recurso rec ON r.ID_Recurso = rec.ID_Recurso
                 JOIN Franja f ON r.ID_Franja = f.ID_Franja
@@ -84,7 +90,8 @@ class Reservas_Model {
                     r.Fecha_Hora_Reserva,
                     f.Hora_Inicio,
                     f.Hora_Fin,
-                    r.Estado
+                    r.Estado,
+                    r.Fecha_Disfrute_Reserva AS Fecha_Disfrute_Reserva
                 FROM Reserva r
                 JOIN Usuario u ON r.ID_Usuario = u.ID_Usuario
                 JOIN Recurso rec ON r.ID_Recurso = rec.ID_Recurso
@@ -116,6 +123,19 @@ class Reservas_Model {
         return $result;
     }
 
+    function getAvailableResources($ID_Centro, $type, $day, $franja) {
+        $sql = 'SELECT * FROM Recurso ' .
+            'WHERE Recurso.Disponibilidad = \'Disponible\' AND Recurso.ID_Centro = ? ' .
+            'AND Recurso.Tipo = ? ' . 
+            'AND Recurso.ID_Recurso NOT IN (SELECT Reserva.ID_Recurso FROM Reserva WHERE Reserva.Fecha_Disfrute_Reserva = ? AND Reserva.ID_Franja = ?)';
+
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('issi', $ID_Centro, $type, $day, $franja);
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
     // Método para obtener los tipos de recursos disponibles en un centro específico
     function getTiposRecursosPorCentro($ID_Centro) {
         $sql = "SELECT DISTINCT Tipo FROM Recurso WHERE ID_Centro = ? AND Disponibilidad = 'Disponible'";
@@ -135,14 +155,10 @@ class Reservas_Model {
     }
 
     // Método para obtener las franjas horarias disponibles para un recurso específico
-    function getFranjasDisponibles($ID_Recurso) {
-        $sql = "SELECT Franja.* 
-                FROM Franja 
-                WHERE ID_Franja NOT IN (
-                    SELECT ID_Franja FROM Reserva WHERE ID_Recurso = ? AND Estado = 'Confirmada'
-                )";
+    function getFranjasDisponibles() {
+        $sql  = "SELECT Franja.* FROM Franja ";
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('i', $ID_Recurso);
+
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -155,6 +171,17 @@ class Reservas_Model {
             return "Reserva confirmada exitosamente.";
         } else {
             return "Error al confirmar la reserva.";
+        }
+    }
+
+    public function devolver_reserva($ID_Reserva) {
+        $sql = "UPDATE Reserva SET Devuelto = 1 WHERE ID_Reserva = ?";
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('i', $ID_Reserva);
+        if ($stmt->execute()) {
+            return "Reserva devuelta exitosamente.";
+        } else {
+            return "Error al devolver la reserva.";
         }
     }
     
@@ -223,27 +250,20 @@ class Reservas_Model {
         $this->ID_Usuario = $ID_Usuario;
     
         // Insertar la reserva en la base de datos con la fecha y hora actual y estado "No Confirmado"
-        $sql = "INSERT INTO reserva (ID_Usuario, ID_Recurso, Fecha_Hora_Reserva, ID_Franja, Estado) VALUES (?, ?, NOW(), ?, 'No Confirmada')";
+        $sql = "INSERT INTO reserva (ID_Usuario, ID_Recurso, Fecha_Hora_Reserva, ID_Franja, Estado, Fecha_Disfrute_Reserva) VALUES (?, ?, NOW(), ?, 'No Confirmada', ?)";
         $stmt = $this->mysqli->prepare($sql);
-    
-        if ($stmt === false) {
+
+        if (!$stmt) {
             return "Error al preparar la consulta: " . $this->mysqli->error;
         }
     
-        $stmt->bind_param('iis', $this->ID_Usuario, $this->ID_Recurso, $this->ID_Franja);
+        $stmt->bind_param('iiss', $this->ID_Usuario, $this->ID_Recurso, $this->ID_Franja, $this->Fecha_Disfrute_Reserva);
     
-        if ($stmt->execute()) {
-            // Si la reserva se creó correctamente, actualizamos el estado del recurso
-            $resultadoActualizacion = $this->actualizarEstadoRecurso($this->ID_Recurso);
-    
-            if ($resultadoActualizacion === true) {
-                return "Reserva creada exitosamente";
-            } else {
-                return "Error al actualizar el estado del recurso: " . $resultadoActualizacion;
-            }
-        } else {
+        if (!$stmt->execute()) {
             return "Error al ejecutar la consulta: " . $stmt->error;
         }
+
+        return "Reserva creada exitosamente";
     }
     
     function actualizarEstadoRecurso($ID_Recurso) {
@@ -269,12 +289,13 @@ class Reservas_Model {
                     r.ID_Reserva,
                     u.Nombre AS NombreUsuario,
                     u.Apellidos AS ApellidosUsuario,
-                    rec.Tipo AS TipoRecurso,
+                    rec.Descripcion AS DescripcionRecurso,
                     c.Nombre AS NombreCentro,
                     r.Fecha_Hora_Reserva AS FechaReserva,
                     f.Hora_Inicio,
                     f.Hora_Fin,
-                    r.Estado
+                    r.Estado,
+                    r.Fecha_Disfrute_Reserva AS Fecha_Disfrute_Reserva
                 FROM Reserva r
                 JOIN Usuario u ON r.ID_Usuario = u.ID_Usuario
                 JOIN Recurso rec ON r.ID_Recurso = rec.ID_Recurso
@@ -298,12 +319,13 @@ class Reservas_Model {
                     r.ID_Reserva,
                     u.Nombre AS NombreUsuario,
                     u.Apellidos AS ApellidosUsuario,
-                    rec.Tipo AS TipoRecurso,
+                    rec.Descripcion AS DescripcionRecurso,
                     c.Nombre AS NombreCentro,
                     r.Fecha_Hora_Reserva AS FechaReserva,  -- Extraer solo la fecha
                     f.Hora_Inicio,
                     f.Hora_Fin,
-                    r.Estado
+                    r.Estado,
+                    r.Fecha_Disfrute_Reserva AS Fecha_Disfrute_Reserva
                 FROM Reserva r
                 JOIN Usuario u ON r.ID_Usuario = u.ID_Usuario
                 JOIN Recurso rec ON r.ID_Recurso = rec.ID_Recurso

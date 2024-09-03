@@ -61,24 +61,21 @@ class Recursos_Model {
     // Método para buscar recursos
     function search() {
         $sql = "SELECT Recurso.*, Centro.Nombre AS Nombre_Centro 
-                FROM Recurso 
-                INNER JOIN Centro ON Recurso.ID_Centro = Centro.ID_Centro
-                WHERE Recurso.Tipo LIKE ? AND 
-                      Recurso.Descripcion LIKE ? AND 
-                      Recurso.Disponibilidad LIKE ? AND
-                      Centro.Nombre LIKE ?";
+                FROM Recurso INNER JOIN Centro ON Recurso.ID_Centro = Centro.ID_Centro ";
+
+        if (!is_null($this->ID_Centro)) {
+            $sql .= "WHERE Recurso.ID_Centro = ?";
+        }
     
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
     
-        $search_tipo = "%$this->Tipo%";
-        $search_descripcion = "%$this->Descripcion%";
-        $search_disponibilidad = "%$this->Disponibilidad%";
-        $search_centro = "%$this->ID_Centro%";
-    
-        $stmt->bind_param('ssss', $search_tipo, $search_descripcion, $search_disponibilidad, $search_centro);
+        if (!is_null($this->ID_Centro)) {
+            $stmt->bind_param('i', $this->ID_Centro);
+        }
+
         $stmt->execute();
         return $stmt->get_result();
     }

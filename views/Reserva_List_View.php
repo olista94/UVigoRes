@@ -47,7 +47,7 @@ class Reserva_List_View {
                         echo "<td>{$row['Hora_Inicio']}</td>";
                         echo "<td>{$row['Hora_Fin']}</td>";
                         echo "<td>{$row['Estado']}</td>";
-                        echo "<td>{$row['Devuelto']}</td>";
+                        echo "<td>" . ($row['Devuelto'] == 1 ? 'Sí' : 'No') . "</td>";
                         echo "<td>";
                         // Botón de confirmar reserva (solo si no está confirmada)
                         if ($row['Estado'] != 'Confirmada') {

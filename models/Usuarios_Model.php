@@ -1,23 +1,25 @@
 <?php
 class Usuarios_Model {
     var $ID_Usuario;
-    var $NIU;
+    var $DNI;
     var $Nombre;
     var $Apellidos;
-    var $DNI;
+    var $NIU;
     var $Email;
     var $Rol;
     var $Contrasena;
+    var $ID_Centro;
 
-    function __construct($ID_Usuario, $NIU, $Nombre, $Apellidos, $DNI, $Email, $Rol, $Contrasena) {
+    function __construct($ID_Usuario, $DNI, $Nombre, $Apellidos, $NIU, $Email, $Rol, $Contrasena, $ID_Centro) {
         $this->ID_Usuario = $ID_Usuario;
-        $this->NIU = $NIU;
+        $this->DNI = $DNI;
         $this->Nombre = $Nombre;
         $this->Apellidos = $Apellidos;
-        $this->DNI = $DNI;
+        $this->NIU = $NIU;
         $this->Email = $Email;
         $this->Rol = $Rol;
         $this->Contrasena = $Contrasena;
+        $this->ID_Centro = $ID_Centro;
 
         include_once 'Access_DB.php';
         $this->mysqli = ConnectDB();
@@ -45,8 +47,8 @@ class Usuarios_Model {
             return 'Error al insertar. Ya existe un usuario con ese DNI o NIU';
         }
 
-        $sql = "INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO Usuario (DNI, Nombre, Apellidos, NIU, Email, Rol, Contrasena, ID_Centro) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($sql);
 
         if ($stmt === false) {
@@ -54,7 +56,7 @@ class Usuarios_Model {
         }
     
         // Bind parameters
-        $stmt->bind_param('sssssss', $this->DNI, $this->Nombre, $this->Apellidos, $this->NIU, $this->Email, $this->Rol, $this->Contrasena);
+        $stmt->bind_param('ssssssss', $this->DNI, $this->Nombre, $this->Apellidos, $this->NIU, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Centro);
     
         // Execute statement
         if (!$stmt->execute()) {
@@ -72,7 +74,8 @@ class Usuarios_Model {
                 Apellidos = ?, 
                 Email = ?, 
                 Rol = ?, 
-                Contrasena = ?
+                Contrasena = ?,
+                ID_Centro = ?
               WHERE ID_Usuario = ?";
 
         $stmt = $this->mysqli->prepare($sql);
@@ -81,7 +84,7 @@ class Usuarios_Model {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
 
-        $stmt->bind_param('sssssssi', $this->DNI, $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Usuario);
+        $stmt->bind_param('ssssssssi', $this->DNI, $this->NIU, $this->Nombre, $this->Apellidos, $this->Email, $this->Rol, $this->Contrasena, $this->ID_Centro, $this->ID_Usuario);
         if (!$stmt->execute()) {
             return 'Error en la modificación';
         } else {
@@ -91,46 +94,49 @@ class Usuarios_Model {
 
     function search() {
         $sql = "SELECT * FROM Usuario 
-                WHERE NIU LIKE ? AND 
+                WHERE DNI LIKE ? AND
                       Nombre LIKE ? AND 
                       Apellidos LIKE ? AND 
-                      DNI LIKE ? AND 
+                      NIU LIKE ? AND 
                       Email LIKE ? AND 
-                      Rol LIKE ?";
+                      Rol LIKE ? AND
+                      ID_Centro LIKE ?";
 
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
 
-        $search_niu = "%$this->NIU%";
+        $search_dni = "%$this->DNI%";
         $search_nombre = "%$this->Nombre%";
         $search_apellidos = "%$this->Apellidos%";
-        $search_dni = "%$this->DNI%";
+        $search_niu = "%$this->NIU%";
         $search_correo = "%$this->Email%";
         $search_rol = "%$this->Rol%";
+        $search_centro = "%$this->ID_Centro%";
 
-        $stmt->bind_param('ssssss', $search_niu, $search_nombre, $search_apellidos, $search_dni, $search_correo, $search_rol);
+        $stmt->bind_param('sssssss', $search_niu, $search_nombre, $search_apellidos, $search_dni, $search_correo, $search_rol, $search_centro);
         $stmt->execute();
         return $stmt->get_result();
     }
 
     function search_by_term($query) {
         $search_term = "%$query%";
-        $sql = "SELECT * FROM Usuario 
-                WHERE NIU LIKE ? 
+        $sql = "SELECT * FROM Usuario
+                WHERE DNI LIKE ?  
                 OR Nombre LIKE ? 
                 OR Apellidos LIKE ? 
-                OR DNI LIKE ? 
+                OR NIU LIKE ? 
                 OR Email LIKE ? 
-                OR Rol LIKE ?";
+                OR Rol LIKE ?
+                OR ID_Centro = ?";
         
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
         }
     
-        $stmt->bind_param('ssssss', $search_term, $search_term, $search_term, $search_term, $search_term, $search_term);
+        $stmt->bind_param('sssssss', $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term);
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -169,6 +175,7 @@ class Usuarios_Model {
 
     function rellenadatos() {
         $sql = "SELECT * FROM Usuario WHERE DNI = ?";
+        
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt === false) {
             return 'Error al preparar la consulta: ' . $this->mysqli->error;
@@ -177,7 +184,7 @@ class Usuarios_Model {
         $stmt->bind_param('s', $this->DNI);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+        
         // Verificar si se encontró algún resultado
         if ($result->num_rows > 0) {
             return $result;
@@ -204,6 +211,43 @@ class Usuarios_Model {
         }
     
         return $roles;
+    }
+
+    function getCentros() {
+        $centros = array();
+        
+        // Consulta para obtener los centros
+        $sql = "SELECT ID_Centro, Nombre FROM Centro";
+        $result = $this->mysqli->query($sql);
+
+        if ($result === false) {
+            return 'Error al realizar la consulta: ' . $this->mysqli->error;
+        }
+
+        while ($row = $result->fetch_assoc()) {
+            $centros[$row['ID_Centro']] = $row['Nombre'];
+        }
+
+        return $centros;
+    }
+
+    function getCentroNameById($id_centro) {
+        $sql = "SELECT Nombre FROM Centro WHERE ID_Centro = ?";
+        $stmt = $this->mysqli->prepare($sql);
+        if ($stmt === false) {
+            return 'Error al preparar la consulta: ' . $this->mysqli->error;
+        }
+
+        $stmt->bind_param('i', $id_centro);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['Nombre'];
+        } else {
+            return null; // No se encontró el centro
+        }
     }
 
     function changePassword($new_password, $confirm_password) {

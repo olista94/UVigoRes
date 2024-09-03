@@ -1,5 +1,5 @@
 function isValidName(name) {
-    var pattern = /^[a-zA-Z]+$/;
+    var pattern = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/;
     return pattern.test(name);
 }
 

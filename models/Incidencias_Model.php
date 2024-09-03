@@ -266,27 +266,14 @@ class Incidencias_Model {
     // Método para obtener becarios y conserjes que pertenecen al mismo centro que el recurso de la incidencia
     public function getBecariosYConserjesDelCentro($ID_Centro) {
         $sql = "
-                SELECT 
-                    ID_Centro, Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
-                FROM 
-                    Usuario
-                JOIN 
-                    Centro_Becario ON Usuario.ID_Usuario = Centro_Becario.ID_Usuario
-                WHERE ID_Centro = ?
-
-                UNION
-
-                SELECT 
-                    ID_Centro, Usuario.ID_Usuario, Usuario.Nombre, Usuario.Apellidos, Usuario.Rol 
-                FROM 
-                    Usuario
-                JOIN 
-                    Centro_Conserje ON Usuario.ID_Usuario = Centro_Conserje.ID_Usuario
-                WHERE ID_Centro = ?
+                SELECT
+                    ID_Centro, ID_Usuario, Nombre, Apellidos, Rol 
+                FROM usuario 
+                WHERE (Rol LIKE 'Personal de conserjeria' OR Rol LIKE 'Becario de infraestructura') AND ID_Centro = ?; 
             ";
 
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('ii', $ID_Centro, $ID_Centro);
+        $stmt->bind_param('i', $ID_Centro);
         $stmt->execute();
         $result = $stmt->get_result();
 
