@@ -41,7 +41,8 @@ class Reservas_Tipos_Recursos_View {
                                     }
                                     ?>
                             </select>
-                            <input name="day" type="date">
+                            <!-- Aquí se establece la fecha mínima como el día actual -->
+                            <input name="day" type="date" min="<?php echo date('Y-m-d'); ?>">
                         </div>
                         <button type="submit" class="button"><?php echo $strings['Seleccionar']; ?></button>
                     </form>

@@ -185,17 +185,6 @@ class Reservas_Model {
         }
     }
     
-    // public function eliminar_reserva($ID_Reserva) {
-    //     $sql = "DELETE FROM Reserva WHERE ID_Reserva = ?";
-    //     $stmt = $this->mysqli->prepare($sql);
-    //     $stmt->bind_param('i', $ID_Reserva);
-    //     if ($stmt->execute()) {
-    //         return "Reserva eliminada exitosamente.";
-    //     } else {
-    //         return "Error al eliminar la reserva.";
-    //     }
-    // }
-
     public function eliminar_reserva($ID_Reserva) {
         // Iniciar una transacción para asegurar la consistencia
         $this->mysqli->begin_transaction();
@@ -252,6 +241,10 @@ class Reservas_Model {
         // Insertar la reserva en la base de datos con la fecha y hora actual y estado "No Confirmado"
         $sql = "INSERT INTO reserva (ID_Usuario, ID_Recurso, Fecha_Hora_Reserva, ID_Franja, Estado, Fecha_Disfrute_Reserva) VALUES (?, ?, NOW(), ?, 'No Confirmada', ?)";
         $stmt = $this->mysqli->prepare($sql);
+        
+
+        // Llamar a la función para actualizar el estado del recurso a 'No Disponible'
+        $actualizacion = $this->actualizarEstadoRecurso($this->ID_Recurso);
 
         if (!$stmt) {
             return "Error al preparar la consulta: " . $this->mysqli->error;
@@ -312,7 +305,6 @@ class Reservas_Model {
         return $result;  // Retorna el objeto mysqli_result
     }
     
-    
     // Método para obtener reservas específicas de un usuario
     public function getReservasByUser($ID_Usuario) {
         $sql = "SELECT 
@@ -345,7 +337,6 @@ class Reservas_Model {
         
         return $result;  // Retorna el objeto mysqli_result
     }
-    
 
     // Método para obtener el ID_Usuario a partir del DNI
     function obtenerIDUsuario($DNI) {
